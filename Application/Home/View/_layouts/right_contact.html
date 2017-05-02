@@ -1,0 +1,316 @@
+<!--右侧联系人-->
+    <div class="right_bar">
+            <div class="r_top clear contact_kind" style="border-bottom: none;">
+                <div class="r_search clear">
+                    <div class="L"><input name="search_content" type="text" placeholder="查找联系人" /></div>
+                    <div class="R cursor" id="search_delete"></div>
+                </div>
+            </div>
+            <div class="contact_list">
+                <!--联系人-->
+                <div class="linaxirena">
+                    <div class="contact_person">
+                    <if condition="$category_id['id'] eq 4 || $_SESSION['userinfo']['department_id'] eq 1 || $_SESSION['userinfo']['department_id'] eq 7">
+                    <!--<if condition="$_SESSION['userinfo']['department_id'] eq 4 || $_SESSION['userinfo']['department_id'] eq 1">-->
+                        <dl class="blackcolor">
+                            <dd class="font13" style="display:block; padding-left:0px">
+                                <div class="lxr_er">
+                                <input type="checkbox" name="checktwo[]" id="5" value="5" class="checkbox"><span class="div_inblock one txt_oneline">区级领导</span><span>(<?php $count = count($list);if($_SESSION['userinfo']['department_id'] == 7){echo ((int)$count-1);}else{echo $count;}?>)</span>
+                                </div>
+                              
+                               <div class="lxr_san Hide">
+                                <foreach name="list" key="key" item="item">
+                                    <if condition="$item['id'] neq $_SESSION['userinfo']['id']">
+                                    <label class="Show"><input type="checkbox" id="{$item.id}" value="{$item.name}" name="checkth[]" class="checkbox"><span class="div_inblock one txt_oneline">{$item.name}</span></label>
+                                    </if>
+                                </foreach>
+                                </div>
+                               
+                            </dd>
+                            
+                        </dl>
+
+                    </if>
+
+                    <dl class="blackcolor">
+                        <dd class="font13" style="display:block; padding-left:0px">
+                            <div class="lxr_er">
+                                <input type="checkbox" name="checktwo[]" id="1" value="1" class="checkbox"><span class="div_inblock one txt_oneline">创文办</span><span>(<?php $count = count($chuangwen_list);if($_SESSION['userinfo']['department_id'] == 1){echo ((int)$count-1);}else{echo $count;}?>)</span>
+                            </div>
+
+                            <div class="lxr_san Hide">
+                                <foreach name="chuangwen_list" key="key" item="item">
+                                    <if condition="$item['id'] neq $_SESSION['userinfo']['id']">
+                                    <label class="Show"><input type="checkbox" id="{$item.id}" value="{$item.name}" name="checkth[]" class="checkbox"><span class="div_inblock one txt_oneline">{$item.name}</span></label>
+                                    </if>
+                                </foreach>
+                            </div>
+
+                        </dd>
+
+                    </dl>
+                     <foreach name="category_list" key="k" item="v">
+                        <dl class="blackcolor">
+                       
+                            <dt class="font13">
+                                <input type="checkbox" name="checkone[]" id="{$v.id}" value="{$v.id}" class="checkbox"><span class="div_inblock one txt_oneline">{$v.category_name}</span><span>({$v.count})</span>
+                            </dt>
+                            <foreach name="v['second']" key="k1" item="v1">
+                            <dd class="font13">
+                                <div class="lxr_er"><input type="checkbox" id="{$v1.id}" value="{$v1.id}" name="checktwo[]" class="checkbox"><span class="div_inblock one txt_oneline">{$v1.d_name}</span><span>({$v1.count})</span></div>
+                               
+                                <div class="Hide lxr_san">
+                                    <foreach name="v1['third']" key="k2" item="v2">
+                                        <if condition="$v2['id'] neq $_SESSION['userinfo']['id']">
+                                            <label class="Show"><input type="checkbox" id="{$v2.id}" value="{$v2.name}" name="checkth[]" class="checkbox"><span class="div_inblock one txt_oneline">{$v2.name}</span></label>
+                                        </if>
+                                    </foreach>
+                                </div>
+                                
+                            </dd>
+                            </foreach>
+                        </dl>
+                        </foreach>
+                    </div>
+                </div>
+                <div class="search_contact Hide">
+                   <!--  <ul>
+                    </ul> -->
+                    <dl  id="search_result" class="blackcolor">
+                        <dd class="font13" style="display:block; padding-left:0px">
+                          <div class="lxr_san">
+                            
+                            </div>
+                        </dd>
+                    </dl>    
+                </div>
+            </div>
+        </div>
+<!--脚本-->
+<   <!--脚本-->
+        <script>
+            $(function(){
+                //左侧二级菜单动画
+                $("#menu dt").click(function(){
+                    if(!$(this).hasClass("on"))
+                    {
+//                      console.log($(this).hasClass("on"))
+                        $(this).addClass("on").parents("dl").siblings().children("dt").removeClass("on");
+                        $(this).siblings("dd").slideDown(300);
+                        $(this).parents("dl").siblings().children("dd").slideUp(300);
+                    }
+                    
+                });
+                //退出
+                $("#exit").click(function(){
+                    //confirm;
+                    layer.confirm('确认退出？', {
+                      btn: ['是','否'] //按钮
+                    }, function(){
+                        layer.msg('退出成功');
+                    }, function(){
+                        layer.close();
+                    });
+                });
+                //选择联系人方法
+                function add_person(){
+                    var three_check=$("input[name='checkth[]']:checked");
+                    var three_id=[];
+                    var person_str="";
+                    var three_strid="";
+                    for(var i=0;i<three_check.length;i++)
+                    {
+                        three_id[i]=three_check[i].id;
+                        three_strid+=three_check[i].id+",";
+                        person_str+=three_check[i].value+";";
+                    }
+                    // console.log(three_id);
+                    // return;
+                    //console.log(three_value,person_str);
+                    return {person_id:three_id,person_name:person_str,person_sid:three_strid}
+                }
+                //联系人分组
+                $(".linaxirena dl dt span").click(function(){
+                    //alert(1);
+                    $(this).parent("dt").siblings("dd").toggle();
+                });
+                $(".linaxirena dl dd .lxr_er span").click(function(){
+                    // alert(1);
+                    $(this).parent().siblings("div").toggle();
+                });
+                //联系人选择:一级选择
+                $("input[name='checkone[]']").change(function(){
+                    var input_two=$(this).parents("dt").siblings().find("input[name='checktwo[]']");
+                    var input_three=$(this).parents("dt").siblings().find("input[name='checkth[]']");
+                    for(var i=0;i<input_two.length;i++)
+                    {
+                        input_two[i].checked=this.checked;
+                    }
+                    for(var i=0;i<input_three.length;i++)
+                    {
+                        input_three[i].checked=this.checked;
+                    }
+                    
+                    $("input[name='contact_person']").val(add_person().person_name);
+                    $("input[name='contract']").val(add_person().person_sid)
+                    
+                });
+                //二级选择
+                $("input[name='checktwo[]']").change(function(){
+                    var input_one=$(this).parents("dd").siblings().find("input[name='checkone[]']");
+                    
+                    var input_two=$(this).parents("dl").find("input[name='checktwo[]']");
+                    var input_twos=$(this).parents("dl").find("input[name='checktwo[]']:checked");
+                    
+                    var input_three=$(this).parents("dd").find("input[name='checkth[]']");
+                    
+                    
+
+                    if(input_one.length!=0)
+                    {
+                        if(input_two.length==input_twos.length)
+                        {
+                            input_one[0].checked=true;
+                        }else{
+                            input_one[0].checked=false;
+                        }
+                    }
+                    for(var i=0;i<input_three.length;i++)
+                    {
+                        input_three[i].checked=this.checked;
+                    } 
+                    $("input[name='contact_person']").val(add_person().person_name);
+                    $("input[name='contract']").val(add_person().person_id)
+                    
+                });
+                //三级选择
+                $(document).on("change","input[name='checkth[]']",function(){
+                // $("input[name='checkth[]']").change(function(){
+                    var input_one=$(this).parents("dl").find("input[name='checkone[]']");
+                    var input_two=$(this).parents("dd").find("input[name='checktwo[]']");
+                    var input_three=$(this).parents("dd").find("input[name='checkth[]']");
+                    var input_threes=$(this).parents("dd").find("input[name='checkth[]']:checked");
+                    
+                    var winput_three=$(this).parents("dl").find("input[name='checkth[]']");
+                    var winput_threes=$(this).parents("dl").find("input[name='checkth[]']:checked");
+                    if(input_two.length!=0)
+                    {
+                        if(input_three.length==input_threes.length)
+                        {
+                            input_two[0].checked=true;
+                        }else{
+                            input_two[0].checked=false;
+                        }
+                    }
+                    if(input_one.length!=0)
+                    {
+                       if(winput_three.length==winput_threes.length)
+                        {
+                            input_one[0].checked=true;
+                        }else{
+                            input_one[0].checked=false;
+                        } 
+                    }
+                    
+                    
+                    $("input[name='contact_person']").val(add_person().person_name);
+                    $("input[name='contract']").val(add_person().person_id)
+                });
+                
+                //清空搜索框内容
+                $("#search_delete").click(function(){
+                    if($(this).hasClass("delete"))
+                    {
+                        $("input[name='search_content']").val("");
+                        $(this).removeClass("delete");
+                        $(".search_contact").hide();
+                        $(".lianxirena").show();
+                    }
+                });
+                //联系人输入框变化时
+                $("input[name='search_content']").on("input propertychange",function(){
+                   
+                    // alert(keyword);
+                    if($(this).val()=="")
+                    {
+                        console.log(1);
+                        $("#search_delete").removeClass("delete");
+                         $(".linaxirena").show();
+                        $(".search_contact").hide();
+                    }
+                    else
+                    {
+                        $(".search_contact").show();
+                        $(".linaxirena").hide();
+                        $("#search_delete").addClass("delete");
+
+                        console.log(add_person().person_id);
+                       //return;
+                        var keyword = $(this).val();
+                        $.ajax({
+                            type:"get",
+                            data:{'keyword': keyword},
+                            url:"__ROOT__/home/User/search_user",
+                            success:function(json) {
+                                var data = JSON.parse(json);
+                               console.log(data);
+                               var str="";
+                                if (data) {
+                                    for (var i=0;i<data.length;i++){
+                                        var checked="";
+                                        var id = data[i].id;
+                                        var value = data[i].name;
+                                        for(var j=0;j<add_person().person_id.length;j++)
+                                        {
+                                            if(data[i].id==add_person().person_id[j])
+                                            {
+                                                 checked="checked='checked'";
+                                                 id="";
+                                                 value="";
+                                            }
+                                        }
+                                        // alert(id);
+                                       str+=' <label class="Show"><input type="checkbox" '+checked+' id='+id+' / value='+value+' name="checkth[]" class="checkbox"><span class="div_inblock one txt_oneline">'+data[i].name+'</span></label>'
+                               
+                                    }
+                                }else{
+                                    str = "<div>没有数据</div>";
+
+                                }
+                                    $(".linaxirena").hide();
+                                    // $('#search_result').html("");
+                                    $('#search_result .lxr_san').html(str);
+                            }
+                        });
+                        
+                    }
+                });
+                //选择联系人
+                $(document).on("")
+                $("#search_result a").click(function(){
+                    var str=$("input[name='contact_person']").val();
+                    var xstr="";
+                    xstr=$(this).html()+";";
+                    $("input[name='contact_person']").val(str+xstr);
+                });
+                //联系人市区焦点的时候
+                $("input[name='contact_person']").focusout(function(){
+                    var str=$(this).val();
+                    var stra=str.split(";");
+                    var xstr="";
+                    for(var i=0;i<stra.length;i++)
+                    {
+                        //console.log(stra[i]);
+                        if(stra[i]!="")
+                        {
+                            xstr+=stra[i]+";";
+                        }
+                        
+                    }
+//                  console.log(stra.length);
+                    $(this).val(xstr);
+                });
+                
+                //筛选
+            })
+        </script>

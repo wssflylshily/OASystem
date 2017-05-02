@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>南开创文</title>
+    <link rel="stylesheet" href="__PUBLIC__/css/style.css" />
+    <script type="text/javascript" src="__PUBLIC__/js/jquery-1.12.4.min.js" ></script>
+    <script type="text/javascript" src="__PUBLIC__/js/layer/layer.js" ></script>
+    <script type="text/javascript" src="__PUBLIC__/js/laydate/laydate.js"></script>
+</head>
+<body>
+<include file="_layouts/left_bar" />
+<!--中间内容-->
+<div class="content">
+    <div>
+        <a href="{:U('DocumentCommon/commonIndex',array('type'=>$_GET['type']))}" type="button" class="buttonc green">返回</a>
+        <if condition="$_GET['keyword'] neq null">
+            <h2>关键字中含有“{$_GET['keyword']}”的数据</h2>
+        </if>
+        <div class="email_reul" style="border-top: 1px solid #2567d6;padding-top: 0;margin-top: 20px;">
+            <table class="gongwen_table" width="100%" cellspacing="0">
+                <tr class="font13 tr1">
+                    <td width="350">测评项目</td>
+                    <td width="350">任务标题</td>
+                    <td style="min-width: 60px;">牵头单位</td>
+                    <td style="min-width: 60px;">责任单位</td>
+                    <td width="500" align="center">操作</td>
+                </tr>
+                <foreach name="rs" item="detail">
+                    <tr>
+                        <td class="font13">{$detail.headline}</td>
+                        <td class="font13"><a href="{:U('DocumentCommon/commondetailpage',array('id'=>$detail['id'], 'type'=>$type))}" class="txt_oneline L blackcolor one2">{$detail.title}</a></td>
+                        <td class="font13"><div class="txt_oneline one1" style="max-width: 300px;" title="<?php if($detail['lead_name'])echo $detail['lead_name']; ?>"><?php if($detail['lead_name'])echo $detail['lead_name']; ?></div></td>
+                        <td class="font13"><div class="txt_oneline one1" style="max-width: 300px;" title="<?php if($detail['responsibility_name'])echo $detail['responsibility_name']; ?>"><?php if($detail['responsibility_name'])echo $detail['responsibility_name']; ?></div></td>
+                        <td class="font12" align="center">
+                            <if condition="$detail['d_finish'] eq 1">
+                                <p class="buttonc" style="color: #000">已完成</p>
+                            <else />
+                                <if condition="$detail['edit'] eq 1" >
+                                    <button type="button" class="buttonc blue huibao_gw" data-id="{$detail.id}">汇报</button>&nbsp;
+                                    <button type="button" class="buttonc red owner_wc_gw" data-id="{$detail.id}">确认完成</button>&nbsp;
+                                <elseif condition="$_SESSION['userinfo']['department_id'] eq 1" />
+                                    <button type="button" class="buttonc green wancheng_gw" data-id="{$detail.id}">全部完成</button>
+                                <elseif condition="$detail['is_finish'] eq 1" />
+                                    <p class="buttonc" style="color: #000">已完成</p>
+                                <else />
+                                </if>
+                            </if>
+                            <a href="{:U('DocumentCommon/commondetailpage',array('id'=>$detail['id'], 'type'=>$type))}" type="button" class="buttonc blue">查看详情</a>
+                        </td>
+                    </tr>
+                </foreach>
+            </table>
+        </div>
+        <div class="email_com nobor pagemore font13">
+            <!--<a href="#" class="on">1</a><a href="#">1</a><a href="#">1</a><a href="#">1</a>-->
+            {$page}
+        </div>
+    </div>
+</div>
+<!--脚本-->
+<script>
+    $(function(){
+
+        $('#doc2').parents("#menu").find("dl,dd").removeClass("on");
+        $('#doc2').parents("#menu").find("dd").removeClass("Show");
+        $('#doc2').addClass("on");
+        var type = "{$type}";
+        if (type==1){
+            $('#dcommon').addClass("on");
+            $('#dcommon').parents("dd").addClass("Show");
+        }else if(type==2){
+            $('#wcn').addClass("on");
+            $('#wcn').parents("dd").addClass("Show");
+        }
+
+        //类型筛选
+        $("select[name='leixing_screen']").change(function(){
+            //alert(1);
+        });
+        //完成筛选
+        $(".screen_finish li").click(function(){
+            var str=$(this).html();//全部，已完成，未完成
+            $(this).addClass("on").siblings().removeClass("on");
+
+        });
+        //刷新
+        $(".refresh_gw").click(function(){
+            //window.location.reload();
+        });
+        //催办
+        $(".cuiban_gw").click(function(){
+            var did = $(this).attr('data-id');
+            layer.open({
+                title:"任务反馈",
+                type: 1,
+                skin: 'layui-box', //加上边框
+                area: ['520px', '290px'], //宽高
+                content: '<div><textarea class="huibao_content" placeholder="输入反馈内容"></textarea></div><div class="center_btn"><button type="button" class="buttonc red huibao_ok" data-id="'+did+'">确定</button></div>'
+            });
+        });
+        //完成
+        $(".wancheng_gw").click(function(){
+            var did = $(this).attr('data-id');
+            layer.confirm('确认完成？', {
+                btn: ['是','否'] //按钮
+            }, function(){
+                //layer.msg('已完成');
+                $.ajax({
+                    type:"GET",
+                    data:{did: did},
+                    url:"__ROOT__/home/DocumentCommon/commonFinish",
+                    success:function(e) {
+                        if (e==1){
+                            layer.msg('操作成功');
+                            $(".layui-layer-close").click();
+                            setTimeout(function(){
+                                window.location.reload();
+                            },3000)
+                        }else{
+                            layer.msg('操作失败');
+                        }
+
+                    }
+                });
+
+            }, function(){
+                layer.close();
+            });
+        })
+
+        //完成
+        $(".owner_wc_gw").click(function(){
+            var did = $(this).attr('data-id');
+            layer.confirm('确认完成？', {
+                btn: ['是','否'] //按钮
+            }, function(){
+                //layer.msg('已完成');
+                $.ajax({
+                    type:"GET",
+                    data:{did: did},
+                    url:"__ROOT__/home/DocumentCommon/commonFinishOwner",
+                    success:function(e) {
+                        if (e==1){
+                            layer.msg('操作成功');
+                            $(".layui-layer-close").click();
+                            setTimeout(function(){
+                                window.location.reload();
+                            },3000)
+                        }else{
+                            layer.msg('操作失败');
+                        }
+
+                    }
+                });
+
+            }, function(){
+                layer.close();
+            });
+        })
+
+        //汇报
+        $(".huibao_gw").click(function(){
+            layer.open({
+                title:"任务进度汇报",
+                type: 1,
+                skin: 'layui-box', //加上边框
+                area: ['520px', '320px'], //宽高
+                content: '<form action="__ROOT__/home/DocumentCommon/postHuibaoCommon" method="post" enctype="multipart/form-data">'+
+                '<div><textarea class="huibao_content" placeholder="输入汇报内容" name="message"></textarea></div>' +
+                '<div id="filediv"><a href="javascript:;" class="bluecolor" id="addfile">' +
+                '<img src="__PUBLIC__/img/icon_07.png"> 添加附件</a>'+
+                '<input type="hidden" name="id" value="{$detail.id}" />'+
+//                        '<input type="file" name="photo[]" />'+
+
+                '</div>' +
+                '<div class="center_btn">' +
+                '<button type="submit" onclick="return huibao_ok()" class="buttonc red huibao_ok">确定</button></div>'+
+                '</form>'
+            });
+        });
+
+        $(document).on("click","#addfile",function(){
+            var str = '<input type="file" name="photo[]" />';
+            $("#filediv").append(str);
+        })
+    })
+</script>
+<script>
+    $(function(){
+        $('#doc2').parents("#menu").find("dl,dd").removeClass("on");
+        $('#doc2').parents("#menu").find("dd").removeClass("Show");
+        $('#doc2').addClass("on");
+        var type = "{$type}";
+        if (type==1 || type==5 ||type==6){
+            $('#dcommon').addClass("on");
+            $('#dcommon').parents("dd").addClass("Show");
+        }else if(type==2 || type==3 || type==4){
+            $('#wcn').addClass("on");
+            $('#wcn').parents("dd").addClass("Show");
+        }
+    })
+</script>
+</body>
+</html>

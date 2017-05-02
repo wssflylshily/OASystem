@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>南开创文</title>
+		<link rel="stylesheet" href="__PUBLIC__/css/style.css" />
+		<script type="text/javascript" src="__PUBLIC__/js/jquery-1.12.4.min.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/js/layer/layer.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/js/laydate/laydate.js"></script> 
+		<script type="text/javascript" charset="utf-8" src="__PUBLIC__/ueditor/ueditor.config.js"></script>
+		<script type="text/javascript" charset="utf-8" src="__PUBLIC__/ueditor/ueditor.all.min.js"> </script>
+		<script type="text/javascript" charset="utf-8" src="__PUBLIC__/ueditor/lang/zh-cn/zh-cn.js"></script>
+	</head>
+	<body>
+		<include file="_layouts/left_bar" />
+		<!--中间内容-->
+		<form action="__ROOT__/home/user/postEditGongGao" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="id" value="{$detail['id']}">
+		<div class="content">
+			<div>
+				<div class="email_com font12 nobor">
+					<span class="tufa_icon font16"><b>编辑公告</b></span>
+				</div>
+				<div class="font13">
+					<table class="email_table">
+						<tr>
+				<!-- 		<if condition="$detail['department_list'] eq ''">
+						checked="checked" 
+						</if> -->
+							<td colspan="6">
+								<table class="email_table email_table1"><tr>
+									<td width="70">发布范围：</td>
+									<td width="70"><label><input type="radio"  checked="checked" class="radio" value="0" name="fbfw" onclick="check()"> 全体</label></td>
+									<td width="30" align="right"><input type="radio" value="{$detail['department_id']}" id="ggid" class="radio" name="fbfw" 	<if condition="$detail['department_list'] neq ''">
+						checked="checked" 
+						</if> ></td>
+									<!--<td><div class="div1 xldiv">
+										<input type="text"  name="shjdw" placeholder="选择单位,多个请以';'分隔" value="{$detail['department_list']}">
+											<div class="select_box Hide">
+											<input type="hidden" name="ggid">
+												<div class="search_txt clear font13">
+													<input class="L" name="search_con" type="text">
+													<span class="R"></span>
+												</div>
+											<div class="ulcontent" id="qt">
+												<ul></ul>
+											</div>
+											</div>
+									    </div>
+									</td>-->
+									<td><div class="div1 xldiv">
+										<input type="hidden" name="qtdwid" id="qtdwid">
+										<input class="select_qiantou" type="text" name="qtdw" placeholder="选择上级部门" value="{$detail['department_list']}">
+									</div></td>
+								</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3">
+								<table class="email_table email_table1"><tr>
+									<td width="70">公告标题：</td>
+									<td><div class="div1">
+										<input type="text" name="rwbt" placeholder="公告标题" value="{$detail['title']}">
+									</div></td>
+								</tr>
+								</table>
+							</td>
+							<td colspan="3" width="33.333%">
+								<table class="email_table email_table1"><tr>
+									<td width="120">选择分类：</td>
+									<td><div class="div1 xldiv" style="position: relative; z-index:99">
+										<input type="text" name="rwlx" autocomplete="off" placeholder="选择分类" value="<if condition="$detail['type']==1">公告<else />通知</if>">
+										<div id="doc_type" class="select_box xxfl_s Hide">
+											<input type="hidden" name="ggtype" value="{$detail['type']}">
+											<div class="ulcontent">
+												<ul>
+													<li data-id="1">公告</li>
+													<li data-id="2">通知</li>
+												</ul>
+											</div>
+										</div>
+									</div></td>
+								</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="6">公告描述：</td>
+						</tr>
+						<tr>
+							<td colspan="6"><div class="div2"><textarea name="zysx" placeholder="公告描述">{$detail['desc']}</textarea></div></td>
+						</tr>
+					</table>
+				</div>
+				<div class="email_com clear nobor clear font13">
+					<div>内容详情：</div>
+				</div>
+				<div>
+					<script id="editor" type="text/plain" style="width:100%;height:500px;">{$detail['content']}</script>
+				</div>
+				<div class="email_com nobor font12">
+					<button type="submit" class="buttonc green"><img src="__PUBLIC__/img/fs_03.png"> 发送</button>
+					&nbsp;&nbsp;<button type="button" class="buttonc" style="width: 60px;" onclick="re_his()"> 取消</button>
+				</div>
+			</div>
+		</div>
+			<!--new add 2017-4-14-->
+			<!--牵头单位-->
+			<div id="houqinr_qiantou" style="display:none">
+				<input type="hidden" class="inputHide" name="sjbm">
+				<div class="houqi_select clear">
+					<div class="L col-6">
+						<div class="houqi_search">
+							<div class="search_txt clear font13">
+								<input class="L" name="search_con" type="text">
+								<span class="R"></span>
+							</div>
+						</div>
+						<div class="h_one">
+							<div class="h_search" id="sssss">
+								<dl>
+									<dd>
+
+									</dd>
+								</dl>
+							</div>
+							<div class="h_content">
+								<dl>
+									<dd class="clear"><div class="Show txt_oneline" data_id="1">创文办</div></dd>
+								</dl>
+								<dl>
+									<dd class="clear"><div class="Show txt_oneline" data_id="7">区领导</div></dd>
+								</dl>
+								<foreach name="depCate" item="rs">
+									<dl>
+										<dt><span class="div_inblock one"><b>{$rs.category_name}</b></span><span>(<?php echo count($rs['data']) ?>)</span>
+											<em class="add_all" title="添加整组" style="color: red;float: right"> </em>
+										</dt>
+
+										<dd class="clear" style="display: none;">
+											<foreach name="rs['data']" item="item">
+												<div class="Show txt_oneline" data_id="{$item.id}">{$item.d_name}</div>
+											</foreach>
+										</dd>
+
+									</dl>
+								</foreach>
+							</div>
+
+						</div>
+					</div>
+					<div class="R col-6">
+						<div style="padding: 10px; line-height: 10px;">已选择：</div>
+						<div class="h_one">
+							<ul class="houqi_old">
+								<if condition="$old_parent neq null">
+									<foreach name="old_parent" item="a">
+										<li class="clear"><div class="L txt_oneline">{$a.d_name}</div><div class="R" data_id="{$a.id}"></div></li>
+									</foreach>
+								</if>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="center_btn"><button type="button" class="buttonc red houqi_ok">确定</button></div>
+			</div>
+			<!--牵头单位-->
+		</form>
+		<!--脚本-->
+		<script>
+		    function re_his() {
+		    	window.history.back();
+		    }
+		    function  check()   
+			{   
+			  	$(".select_qiantou").val("");
+			}
+			$(function(){
+                //new2017-4-14 start
+                var obj;
+                var input_obj;
+                $(document).on("click", ".houqi_select dl dt span", function () {
+                    $(this).parent().siblings("dd").toggle();
+                });
+                //选择牵头单位
+                $(".select_qiantou").click(function () {
+                    //obj=$(this);
+                    obj = $("#houqinr_qiantou");
+                    input_obj = $(this);
+
+                    var name = "上级部门";
+                    layer.open({
+                        title: name,
+                        type: 1,
+                        skin: 'layui-box', //加上边框
+                        area: ['620px', '422px'], //宽高
+                        content: '<div class="select_tanchu clear"></div>'
+                    });
+                    $(".select_tanchu").html(obj.html());
+                });
+                //选择责任单位
+                $(".select_zeren").click(function () {
+                    //obj=$(this);
+                    obj = $("#houqinr_zeren");
+                    input_obj = $(this);
+
+                    var name = "责任单位";
+                    layer.open({
+                        title: name,
+                        type: 1,
+                        skin: 'layui-box', //加上边框
+                        area: ['620px', '422px'], //宽高
+                        content: '<div class="select_tanchu clear"></div>'
+                    });
+                    $(".select_tanchu").html(obj.html());
+                });
+                //搜索
+                $(document).on("input propertychange", ".houqi_search .search_txt input", function () {
+                    var a=$(this);
+                    if ($(this).val() != "") {
+                        $(this).siblings(".R").addClass("delete");
+                        $(this).parents(".houqi_search").siblings(".h_one").children(".h_search").show();
+                        $(this).parents(".houqi_search").siblings(".h_one").children(".h_content").hide();
+
+                        var keyword = $(this).val();
+
+                        $.ajax({
+                            type: "GET",
+                            url: "__ROOT__/home/user/searchDepartmentAjax",
+                            data: {keyword: keyword},
+                            success: function (json) {
+                                var data = JSON.parse(json);
+                                console.log(data);
+                                var str = "";
+                                if (data) {
+                                    for (var i = 0; i < data.length; i++) {
+                                        str += '<div class="Show txt_oneline" data_id="'+data[i].id+'">'+data[i].d_name+'</div>';
+                                    }
+                                }
+                                console.log(str);
+                                a.parents(".houqi_search").siblings(".h_one").find(".h_search dl dd").html(str);
+                            }
+                        });
+
+                    }
+                    else {
+                        $(this).siblings(".R").removeClass("delete");
+                        $(this).parents(".houqi_search").siblings(".h_one").children(".h_search").hide();
+                        $(this).parents(".houqi_search").siblings(".h_one").children(".h_content").show();
+                    }
+
+                });
+                //置为空
+                $(document).on("click", ".houqi_search .search_txt .delete", function () {
+                    $(this).siblings("input").val("");
+                    $(this).parents(".houqi_search").siblings(".h_one").children(".h_search").hide();
+                    $(this).parents(".houqi_search").siblings(".h_one").children(".h_content").show();
+                    $(this).removeClass("delete");
+                });
+                //单个选择添加
+                $(document).on("click", ".select_tanchu dl dd div", function () {
+                    var s_id = $(this).attr("data_id");
+                    var s_name = $(this).html();
+                    //判断是否有重复
+                    var old_id = [];
+                    var panduan = true;
+                    for (var i = 0; i < $(this).parents(".houqi_select").find(".houqi_old .R").length; i++) {
+                        old_id[i] = $(this).parents(".houqi_select").find(".houqi_old .R:eq(" + i + ")").attr("data_id");
+                        if (s_id == old_id[i]) {
+                            panduan = false;
+                        }
+                    }
+                    if (panduan) {
+                        var add_str = '<li class="clear"><div class="L txt_oneline">' + s_name + '</div><div class="R" data_id="' + s_id + '"></div></li>';
+                        $(this).parents(".houqi_select").find(".houqi_old").append(add_str);
+                    }
+
+                });
+                //添加全部
+                $(document).on("click", ".select_tanchu dl dt .add_all", function () {
+                    //初始所有选中
+                    var old_id = [];
+                    for (var i = 0; i < $(this).parents(".houqi_select").find(".houqi_old .R").length; i++) {
+                        old_id[i] = $(this).parents(".houqi_select").find(".houqi_old .R:eq(" + i + ")").attr("data_id");
+                    }
+                    for (var j = 0; j < $(this).parents("dt").siblings("dd").find("div").length; j++) {
+                        var s_id = $(this).parents("dt").siblings("dd").find("div:eq(" + j + ")").attr("data_id");
+                        var s_name = $(this).parents("dt").siblings("dd").find("div:eq(" + j + ")").html();
+                        //判断是否有重复
+                        var panduan = true;
+                        for (var k = 0; k < old_id.length; k++) {
+                            if (s_id == old_id[k]) {
+                                panduan = false;
+                            }
+                        }
+                        if (panduan) {
+                            var add_str = '<li class="clear"><div class="L txt_oneline">' + s_name + '</div><div class="R" data_id="' + s_id + '"></div></li>';
+                            $(this).parents(".houqi_select").find(".houqi_old").append(add_str);
+                        }
+                    }
+                });
+                //选择删除
+                $(document).on("click", ".select_tanchu .houqi_old li .R", function () {
+                    $(this).parents("li").remove();
+                });
+                //后期ok
+                $(document).on("click", ".houqi_ok", function () {
+                    obj.html($(this).parents(".select_tanchu").html());
+                    $(".houqi_search .search_txt .delete").click();
+                    var str_id = "", str_name = "";
+                    for (var i = 0; i < obj.find(".houqi_old .R").length; i++) {
+                        //old_id[i]=$(this).parents(".houqi_select").find(".houqi_old .R:eq("+i+")").attr("data_id");
+                        str_id += obj.find(".houqi_old .R:eq(" + i + ")").attr("data_id");
+                        str_name += obj.find(".houqi_old .R:eq(" + i + ")").siblings(".L").html();
+                        if (i != obj.find(".houqi_old .R").length - 1) {
+                            str_id += ",";
+                            str_name += ";";
+                        }
+                    }
+                    console.log(str_id);
+                    obj.find(".inputHide").val(str_id);
+                    $("#ggid").val(str_id);
+                    var ggid=$("#ggid");
+                    input_obj.val(str_name);
+                    if (str_name!=""){
+                    	 // alert(str_name);
+						ggid[0].checked=true;
+					}
+                    $(".layui-layer-close").click();
+                })
+
+                //new2017-4-12 end
+				//中间搜索部分
+				//获取焦点时显示或隐藏
+				$(".xldiv input").focusin(function(){
+					$(this).siblings(".select_box").show();
+				});
+				$(".xldiv input").on("input propertychange",function(){
+					$(this).siblings(".select_box").show();
+					
+				});
+				$(".xldiv").hover(function(){},function(){
+					$(this).children(".select_box").hide();
+				});
+				//失去焦点时
+				$(".xldiv input").focusout(function(){
+					if(!$(this).siblings(".select_box").hasClass("leixing"))
+					{
+						var str=$(this).val();
+						var stra=str.split(";");
+						str="";
+						for(var i=0;i<stra.length;i++)
+						{
+							if(stra[i]!="")
+							{
+								str+=stra[i]+";";
+							}
+						}
+						$(this).val(str);
+					}
+					
+				});
+				//输入框变化时，显示搜索内容
+				$(document).on("input propertychange",".select_box .search_txt input",function(){
+					
+					if($(this).val()!=""){
+						$(this).siblings(".R").addClass("delete");
+					}
+					else
+					{
+						$(this).siblings(".R").removeClass("delete");
+					}
+					var str="<li>"+"测试"+"</li>"
+					$(this).parents(".select_box").find(".ulcontent ul").html(str);
+				
+				});
+				//置为空
+				$(document).on("click",".select_box .search_txt .delete",function(){
+					$(this).siblings("input").val("");
+				});
+                $(document).on("click",".select_box .ulcontent li",function(){
+                        //类型选择
+                        $(this).parents(".select_box").siblings("input").val($(this).html());
+                        $(this).parents(".select_box").hide();
+
+                        var id = $(this).attr('data-id');
+                        $(this).parents(".ulcontent").siblings("input").val(id);
+                    }
+                );
+				$.ajax({
+	                type:"GET",
+	                url:"__ROOT__/home/document/ajaxDeparements",
+	                success:function(json) {
+	                    var data = JSON.parse(json);
+	                    console.log(data);
+	                    if (data) {
+	                        var str="";
+	                        for (var i=0;i<data.length;i++){
+	                            str += "<li data-id='"+data[i].id+"'>"+data[i].d_name+"</li>"
+	                            $('#qt ul').html("");
+	                            $('#qt ul').append(str);
+	                            $('#zr ul').html("");
+	                            $('#zr ul').append(str);
+	                        }
+	                    }
+
+	                }
+	            });
+			})
+		</script>
+		<script type="text/javascript">
+
+    //实例化编辑器
+    //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
+    var ue = UE.getEditor('editor');
+
+
+    function isFocus(e){
+        alert(UE.getEditor('editor').isFocus());
+        UE.dom.domUtils.preventDefault(e)
+    }
+    function setblur(e){
+        UE.getEditor('editor').blur();
+        UE.dom.domUtils.preventDefault(e)
+    }
+    function insertHtml() {
+        var value = prompt('插入html代码', '');
+        UE.getEditor('editor').execCommand('insertHtml', value)
+    }
+    function createEditor() {
+        enableBtn();
+        UE.getEditor('editor');
+    }
+    function getAllHtml() {
+        alert(UE.getEditor('editor').getAllHtml())
+    }
+    function getContent() {
+        var arr = [];
+        arr.push("使用editor.getContent()方法可以获得编辑器的内容");
+        arr.push("内容为：");
+        arr.push(UE.getEditor('editor').getContent());
+        alert(arr.join("\n"));
+    }
+    function getPlainTxt() {
+        var arr = [];
+        arr.push("使用editor.getPlainTxt()方法可以获得编辑器的带格式的纯文本内容");
+        arr.push("内容为：");
+        arr.push(UE.getEditor('editor').getPlainTxt());
+        alert(arr.join('\n'))
+    }
+    function setContent(isAppendTo) {
+        var arr = [];
+        arr.push("使用editor.setContent('欢迎使用ueditor')方法可以设置编辑器的内容");
+        UE.getEditor('editor').setContent('欢迎使用ueditor', isAppendTo);
+        alert(arr.join("\n"));
+    }
+    function setDisabled() {
+        UE.getEditor('editor').setDisabled('fullscreen');
+        disableBtn("enable");
+    }
+
+    function setEnabled() {
+        UE.getEditor('editor').setEnabled();
+        enableBtn();
+    }
+
+    function getText() {
+        //当你点击按钮时编辑区域已经失去了焦点，如果直接用getText将不会得到内容，所以要在选回来，然后取得内容
+        var range = UE.getEditor('editor').selection.getRange();
+        range.select();
+        var txt = UE.getEditor('editor').selection.getText();
+        alert(txt)
+    }
+
+    function getContentTxt() {
+        var arr = [];
+        arr.push("使用editor.getContentTxt()方法可以获得编辑器的纯文本内容");
+        arr.push("编辑器的纯文本内容为：");
+        arr.push(UE.getEditor('editor').getContentTxt());
+        alert(arr.join("\n"));
+    }
+    function hasContent() {
+        var arr = [];
+        arr.push("使用editor.hasContents()方法判断编辑器里是否有内容");
+        arr.push("判断结果为：");
+        arr.push(UE.getEditor('editor').hasContents());
+        alert(arr.join("\n"));
+    }
+    function setFocus() {
+        UE.getEditor('editor').focus();
+    }
+    function deleteEditor() {
+        disableBtn();
+        UE.getEditor('editor').destroy();
+    }
+    function disableBtn(str) {
+        var div = document.getElementById('btns');
+        var btns = UE.dom.domUtils.getElementsByTagName(div, "button");
+        for (var i = 0, btn; btn = btns[i++];) {
+            if (btn.id == str) {
+                UE.dom.domUtils.removeAttributes(btn, ["disabled"]);
+            } else {
+                btn.setAttribute("disabled", "true");
+            }
+        }
+    }
+    function enableBtn() {
+        var div = document.getElementById('btns');
+        var btns = UE.dom.domUtils.getElementsByTagName(div, "button");
+        for (var i = 0, btn; btn = btns[i++];) {
+            UE.dom.domUtils.removeAttributes(btn, ["disabled"]);
+        }
+    }
+
+    function getLocalData () {
+        alert(UE.getEditor('editor').execCommand( "getlocaldata" ));
+    }
+
+    function clearLocalData () {
+        UE.getEditor('editor').execCommand( "clearlocaldata" );
+        alert("已清空草稿箱")
+    }
+    $("#ewrite").addClass("on");
+</script>
+	<script>
+	    $('#config').parents("#menu").find("dl,dd").removeClass("on");
+	    $('#config').parents("#menu").find("dd").removeClass("Show");
+	    $('#config').addClass("on");
+	    $('#cgonggao').addClass("on");
+	    $('#cgonggao').parents("dd").addClass("Show");
+	</script>
+	</body>
+</html>

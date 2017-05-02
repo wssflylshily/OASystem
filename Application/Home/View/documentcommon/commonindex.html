@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>南开创文</title>
+    <link rel="stylesheet" href="__PUBLIC__/css/style.css" />
+    <script type="text/javascript" src="__PUBLIC__/js/jquery-1.12.4.min.js" ></script>
+    <script type="text/javascript" src="__PUBLIC__/js/layer/layer.js" ></script>
+    <script type="text/javascript" src="__PUBLIC__/js/laydate/laydate.js"></script>
+</head>
+<body>
+<include file="_layouts/left_bar" />
+<!--中间内容-->
+<div class="content">
+
+
+    <div>
+        <form action="" method="get">
+
+            
+
+            <div class="emai_rectitle font12 clear" style="border-bottom:0">
+                
+                <div class="common_task clear">
+                <if condition="$type eq 1 || $type eq 5 || $type eq 6">
+                    <a href="__ROOT__/home/documentCommon/commonIndex/type/1" class="tab <if condition="$type eq 1"> cur </if>">网上申报</a>
+                    <a href="__ROOT__/home/documentCommon/commonIndex/type/6" class="tab <if condition="$type eq 6"> cur </if>">实地考察</a>
+                    <a href="__ROOT__/home/documentCommon/commonIndex/type/5" class="tab <if condition="$type eq 5"> cur </if>">问卷调查</a>
+                </if>
+                <if condition="$type eq 2 || $type eq 3 || $type eq 4">
+                    <a href="__ROOT__/home/documentCommon/commonIndex/type/2" class="tab <if condition="$type eq 2"> cur </if>">网上申报</a>
+                    <a href="__ROOT__/home/documentCommon/commonIndex/type/3" class="tab <if condition="$type eq 3"> cur </if>">实地考察</a>
+                    <a href="__ROOT__/home/documentCommon/commonIndex/type/4" class="tab <if condition="$type eq 4"> cur </if>">问卷调查</a>
+                </if>
+                <div class="L margin_r"><input style="width:300px;height:25px;padding: 1px;border-width: 2px;border-style: inset;border-color: initial;" type="text" name="keyword" value="{$keyword}" placeholder="请输入要查询的内容"></div>
+                <div class="L"><button type="submit" class="buttonc green refresh_gw"><img src="__PUBLIC__/img/an_08.png"> 刷新</button></div>
+                </div>
+                
+
+                
+                <!--<div class="R">
+                    <ul class="list_screen screen_finish clear"><li class="on L one">全部</li><li class="L two">已完成</li><li class="L three">未完成</li></ul>
+                </div>-->
+            </div>
+            <if condition="$_GET['keyword'] neq null">
+                <div style="margin:80px 0 0 0">
+                    <label class="L" style="margin-right:20px">
+                        <input name="key2" type="radio" class="checkbox" value="0" <if condition="0 eq $_GET['key2']">checked="checked"</if>/>&nbsp;
+                        <a href="{:U('DocumentCommon/commonIndex', array('type'=>$_GET['type'], 'keyword'=>$_GET['keyword'], 'key2'=>0))}">全部</a></label>
+
+                    <label class="L" style="margin-right:20px">
+                        <input name="key2" type="radio" class="checkbox" value="1" <if condition="1 eq $_GET['key2']">checked="checked"</if> />&nbsp;
+                        <a href="{:U('DocumentCommon/commonIndex', array('type'=>$_GET['type'], 'keyword'=>$_GET['keyword'], 'key2'=>1))}">测评项目名称</a> </label>
+
+                    <label class="L" style="margin-right:20px">
+                        <input name="key2" type="radio" class="checkbox" value="2" <if condition="2 eq $_GET['key2']">checked="checked"</if> />&nbsp;
+                        <a href="{:U('DocumentCommon/commonIndex', array('type'=>$_GET['type'], 'keyword'=>$_GET['keyword'], 'key2'=>2))}">正文</a> </label>
+
+                    <label class="L" style="margin-right:20px">
+                        <input name="key2" type="radio" class="checkbox" value="3" <if condition="3 eq $_GET['key2']">checked="checked"</if>/>&nbsp;
+                        <a href="{:U('DocumentCommon/commonIndex', array('type'=>$_GET['type'], 'keyword'=>$_GET['keyword'], 'key2'=>3))}">测评项目名称+正文</a> </label>
+
+                    <label class="L" style="margin-right:20px">
+                        <input name="key2" type="radio" class="checkbox" value="4" <if condition="4 eq $_GET['key2']">checked="checked"</if>/>&nbsp;
+                        <a href="{:U('DocumentCommon/commonIndex', array('type'=>$_GET['type'], 'keyword'=>$_GET['keyword'], 'key2'=>4))}">牵头单位+责任单位</a> </label>
+
+                </div>
+            </if>
+            <input type="hidden" name="type" value="{$_GET['type']}">
+        </form>
+        <div class="email_reul">
+            <table class="gongwen_table" width="100%" cellspacing="0">
+                <tr class="font13 tr1">
+                    <td width="350">任务标题</td>
+                    <td style="min-width: 60px;">牵头单位</td>
+                    <td style="min-width: 60px;">责任单位</td>
+                    <td width="164" align="center">操作</td>
+                </tr>
+                <foreach name="rs" item="detail">
+                    <tr>
+                        <td class="font13"><a href="{:U('DocumentCommon/detailcommonlist',array('head'=>$detail['headline'], 'type'=>$type,'keyword'=>$_GET['keyword'], 'key2'=>$_GET['key2']))}" class="txt_oneline L blackcolor one2">{$detail.headline}</a></td>
+                        <td class="font13"><div class="txt_oneline one1" style="max-width: 300px;" title="<?php if($detail['lead_name'])echo $detail['lead_name']; ?>"><?php if($detail['lead_name'])echo $detail['lead_name']; ?></div></td>
+                        <td class="font13"><div class="txt_oneline one1" style="max-width: 300px;" title="<?php if($detail['responsibility_name'])echo $detail['responsibility_name']; ?>"><?php if($detail['responsibility_name'])echo $detail['responsibility_name']; ?></div></td>
+                        <td class="font12" align="center">
+                            <a href="{:U('DocumentCommon/detailcommonlist',array('head'=>$detail['headline'], 'type'=>$type,'keyword'=>$_GET['keyword'], 'key2'=>$_GET['key2']))}" type="button" class="buttonc blue wancheng_gw">查看详情</a>
+                            <!--<if condition="$_SESSION['userinfo']['department_id'] eq 1">
+                                <button type="button" class="buttonc green wancheng_gw" data-id="{$detail.did}">完成</button>
+                            </if>-->
+                        </td>
+                    </tr>
+                </foreach>
+            </table>
+        </div>
+        <div class="email_com nobor pagemore font13">
+            <!--<a href="#" class="on">1</a><a href="#">1</a><a href="#">1</a><a href="#">1</a>-->
+            {$page}
+        </div>
+    </div>
+</div>
+<!--脚本-->
+<script>
+    $(function(){
+
+        $('#doc2').parents("#menu").find("dl,dd").removeClass("on");
+        $('#doc2').parents("#menu").find("dd").removeClass("Show");
+        $('#doc2').addClass("on");
+        var type = "{$type}";
+        if (type==1 || type==5 || type==6){
+            $('#dcommon').addClass("on");
+            $('#dcommon').parents("dd").addClass("Show");
+        }else{
+            $('#wcn').addClass("on");
+            $('#wcn').parents("dd").addClass("Show");
+        }
+
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>南开创文</title>
+		<link rel="stylesheet" href="__PUBLIC__/css/style.css" />
+		<script type="text/javascript" src="__PUBLIC__/js/jquery-1.12.4.min.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/js/layer/layer.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/js/laydate/laydate.js"></script>
+	</head>
+	<body>
+	<include file="_layouts/left_bar" />
+		<!--中间内容-->
+		<div class="content">
+			<div>
+				<div>
+
+					<foreach name="rs" item="a">
+					<div>
+						<div class="news_zhuti_title clear">
+							<div class="L font16"><img src="__PUBLIC__/img/news_03.png">&nbsp;<b>{$a.c_name}</b></div>
+							<div class="R"><a href="__ROOT__/home/news/more/category_id/{$a.cid}" class="bluecolor font13">more</a></div>
+						</div>
+
+						<div class="clear news_zhuti_c">
+							<div class="L col-6">
+								<div class="clear pic_new">
+									<div class="img_div L"><a href="__ROOT__/home/news/detail/id/{$a.id}/type/2"><img src="__ROOT__{$a['zhuti'][0]['pic_url']}"></a></div>
+									<div class="font_div L">
+										<h2 class="font15"><a href="__ROOT__/home/news/detail/id/{$a['zhuti'][0]['id']}/type/2" class="Show txt_oneline blackcolor">{$a['zhuti'][0]['title']}</a></h2>
+										<div class="time_div graycolor">{$a['zhuti'][0]['create_time']|date='Y-m-d H:i:s',###}</div>
+										<div class="font_d graycolor font13">
+											{$a['zhuti'][0]['desc']}
+										</div>
+									
+									</div>
+								</div>
+							</div>
+							<div class="R col-6">
+								<div>
+									<ul class="list_new">
+										<?php for($i=1;$i<count($a['zhuti']);$i++){ ?>
+										<li class="clear">
+											<div class="L"><a href="__ROOT__/home/news/detail/id/{$a['zhuti'][$i]['id']}/type/2" class="Show txt_oneline blackcolor">{$a['zhuti'][$i]['title']}</a></div>
+											<div class="R graycolor">{$a['zhuti'][$i]['create_time']|date='Y-m-d H:i:s',###}</div>
+										</li>
+										<?php } ?>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+					</foreach>
+				</div>
+			</div>
+		</div>
+		<!--脚本-->
+		<script>
+			$(function(){
+			})
+		</script>
+	</body>
+</html>
+<script>
+    $('#news').parents("#menu").find("dl,dd").removeClass("on");
+    $('#news').parents("#menu").find("dd").removeClass("Show");
+    $('#news').addClass("on");
+    $('#nzhuti').addClass("on");
+    $('#nzhuti').parents("dd").addClass("Show");
+</script>

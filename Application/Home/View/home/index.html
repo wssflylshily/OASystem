@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>南开创文</title>
+		<link rel="stylesheet" href="__PUBLIC__/css/style.css" />
+		<script type="text/javascript" src="__PUBLIC__/js/jquery-1.12.4.min.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/js/layer/layer.js" ></script>
+	</head>
+	<body>
+		<include file="_layouts/left_bar" />
+		<!--中间内容-->
+		<div class="content i_content">
+			<div>
+				<div class="index_topli">
+					<ul class="clear">
+						<li class="L first">
+							<div>
+								<a href="__ROOT__/home/email/receive" class="Show clear">
+									<div class="L">
+										<p class="font1">未读邮件</p>
+										<p class="font2">{$read}</p>
+									</div>
+									<div class="R">
+										<img src="__PUBLIC__/img/i_img_15.png">
+									</div>
+								</a>
+							</div>
+						</li>
+						<li class="L second">
+							<div>
+								<a href="__ROOT__/home/document/receive" class="Show clear">
+									<div class="L">
+										<p class="font1">待阅公文</p>
+										<p class="font2">{$receiveDoc}</p>
+									</div>
+									<div class="R">
+										<img src="__PUBLIC__/img/i_img_17.png">
+									</div>
+								</a>
+							</div>
+						</li>
+						<!--<li class="L third">
+							<div>
+								<a href="#" class="Show clear">
+									<div class="L">
+										<p class="font1">待办事项</p>
+										<p class="font2">{$office}</p>
+									</div>
+									<div class="R">
+										<img src="__PUBLIC__/img/i_img_19.png">
+									</div>
+								</a>
+							</div>
+						</li>-->
+					</ul>
+				</div>
+				<div class="clear index_newc">
+					<div class="L col-6">
+						<div class="com_margin">
+							<div class="news_title">
+								<a href="javascript:;" class="Show redcolor"><img src="__PUBLIC__/img/i_img_49.png"> 催办事项</a>
+							</div>
+							<!--催办事项-->
+							<ul class="i_cuiban">
+								<foreach name="reminder" item="rem">
+
+									<li>
+										<a href="__ROOT__/home/document/detail/id/{$rem.did}/type/1" class="Show">
+											<h2 class="clear redcolor">
+												<i class="L">{$rem.d_name}    催办</i>
+												<i class="R">{$rem.s_send_time|date="Y-m-d",###}</i>
+											</h2>
+											<div class="font">
+												<h3 class="blackcolor">{$rem.s_title}</h3>
+												<div class="litintro txt_twoline graycolor">
+													{$rem.s_content}
+												</div>
+											</div>
+										</a>
+									</li>
+									</foreach>
+							</ul>
+						</div>
+					</div>
+					<div class="R col-6">
+						<div class="com_margin">
+							<div class="news_title">
+								<a href="__ROOT__/home/news/news" class="Show bluecolor"><img src="__PUBLIC__/img/i_img_46.png"> 公告栏</a>
+								<a href="__ROOT__/home/news/news" class="Show bluecolor" style="float: right;margin-top: -16px;margin-right: 6px;">更多</a>
+							</div>
+							<div class="i_gonggao">
+								<ul>
+								<foreach name="cateinfo" item="cate">
+									<li>
+										<a href="__ROOT__/home/news/detail/id/{$cate.news_id}/type/1" class="Show txt_oneline graycolor6">
+											<i class="bluecolor">【{$cate.type_name}】</i>{$cate.news_title}
+										</a>
+									</li>
+								</foreach>
+								</ul>
+							</div>
+							<!--期刊-->
+							<div class="i_qikan">
+								<a href="__ROOT__/home/news/jianbao" class="Show"><img src="__PUBLIC__/img/i_img_64.png"></a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--footer-->
+		<div class="footer font12">
+			<a href="#" class="graycolor">© 2017 - 2020 ChuangWenBan Inc. All Rights Reserved</a>
+		</div>
+		<div id="right_contact">
+		</div>
+		
+
+	</body>
+</html>
+<script>
+		$(document).ready(function () {
+			$.ajax({
+				 url:"__ROOT__/home/chat/right_contact",
+				 success:function(a) {
+				 	$('#right_contact').append(a);
+				 }
+			 });
+		});
+//     $.ajax({
+//         type:"GET",
+//         url:"__ROOT__/home/ajax/friends",
+//         success:function(json) {
+//             var data = JSON.parse(json);
+//             console.log(data);
+//             if (data) {
+//                 var str="";
+//                 for (var i=0;i<data.length;i++){
+//                     str += '<dl>'+
+//                         '<dt class="font14 blackcolor">'+data[i].department_name+'</dt>'+
+//                     '<dd>'+
+//                     '<ul class="usually_list">';
+//                     for (var j=0;j<data[i].friends_list.length;j++){
+//                         str += '<li class="clear">'+
+//                        '<div class="L online">'+
+//                        '<a href="#" class="Show">'+
+//                         '<h2 class="font13 blackcolor txt_oneline">'+data[i].friends_list[j].friend_name+'</h2>'+
+//                         '<h3 class="font12 graycolor txt_oneline">诚信体系建设攻关指挥部诚信体系建设攻关指挥部</h3>'+
+//                         '</a>'+
+//                         '</div>'+
+//                         '</li>';
+//                     }
+//                     str += '</ul>'+
+//                         '</dd>'+
+//                         '</dl>';
+//                     $('#lastFriend').html("");
+//                     $('#lastFriend').append(str);
+//                 }
+//             }
+//
+//         },
+//         error: function(){
+//
+//         }
+//     });
+</script>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>南开创文</title>
+	<link rel="stylesheet" href="__PUBLIC__/css/style.css" />
+	<script type="text/javascript" src="__PUBLIC__/js/jquery-1.12.4.min.js" ></script>
+	<script type="text/javascript" src="__PUBLIC__/js/layer/layer.js" ></script>
+</head>
+<body class="login_bg">
+<div class="login_div">
+	<div class="user_div"><img src="__PUBLIC__/img/logo_blue_03.png"></div>
+	<form id="login" action="" method="get">
+		<div class="user_div yhm">
+			<div class="login_c yhm" style="background-image: url(__PUBLIC__/img/login_07.png);"><input type="text" id="name" placeholder="输入用户名"></div>
+		</div>
+		<div class="user_div">
+			<div class="login_c" style="background-image: url(__PUBLIC__/img/login_10.png);"><input type="password" id="password" placeholder="输入密码"></div>
+		</div>
+		<div class="user_div clear">
+			<div class="login_c yhm L" style="background-image: url(__PUBLIC__/img/login_15.png); width: 120px;"><input type="text" id="code" placeholder="输入验证码"></div>
+			<div class="R" style="width: 50%;">
+				<img src="__URL__/verifyImg" id="vimg" height="37" >
+				<a href="javascript:;" class="bluecolor" id="checkimg">换一换</a>
+			</div>
+		</div>
+		<div class="user_div">
+			<button type="button" id="loginbtn" class="buttonc blue" style="width: 100%; padding: 10px 0px;">登 录</button>
+		</div>
+	</form>
+</div>
+<!--脚本-->
+<script>
+	$("#checkimg").click(function () {
+		$("#vimg").attr('src', '__URL__/verifyImg')
+    });
+	$(".user_div input").focus(function(){
+	    //console.log("1");
+	    $(this).parents(".user_div").addClass("yhm");
+        $(this).parents(".user_div").siblings().removeClass("yhm");
+	});
+
+
+    $("#loginbtn").click(function(){
+        //confirm;
+		var name = $("#name").val();
+		var password = $("#password").val();
+		var code = $("#code").val();
+		if (name==""){
+			layer.msg("用户名不能为空");
+			return false;
+		}
+//		else if (name.length!=11){
+//            layer.msg("手机号格式不正确");
+//            return false;
+//        }
+        else if (password==""){
+            layer.msg("密码不能为空");
+            return false;
+        }else if (password.length!=6){
+            layer.msg("密码长度不能小于6位");
+            return false;
+        }else if (code==""){
+            layer.msg("验证码不能为空");
+            return false;
+        }
+        $.ajax({
+            type:"POST",
+            data:{name:name, password:password, code:code},
+            url:"__ROOT__/home/auth/postLogin",
+            success:function(data) {
+                if (data==4){
+                    layer.msg('登陆成功');
+                    window.location.href="__ROOT__/home/home/index"
+                }else if (data==5){
+                    layer.msg('验证码不正确');
+                }else if (data==1){
+                    layer.msg('必填信息不能为空' );
+                }else if (data==2){
+                    layer.msg('用户不存在');
+                }else if (data==3){
+                    layer.msg('密码不正确');
+                }
+				setTimeout(function(){
+                    window.location.reload();
+				},3000)
+            },
+        });
+    });
+</script>
+</body>
+</html>

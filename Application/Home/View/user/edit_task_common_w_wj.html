@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>南开区政府</title>
+		<link rel="stylesheet" href="__PUBLIC__/css/style.css" />
+		<script type="text/javascript" src="__PUBLIC__/js/jquery-1.12.4.min.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/js/layer/layer.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/js/laydate/laydate.js"></script> 
+	</head>
+	<body>
+	   <include file="_layouts/left_bar" />
+		<!--中间内容-->
+		<div class="content">
+			<div>
+				<!--<div class="email_com font12 nobor">
+					<span class="tufa_icon font16"><b>突发性任务发布</b></span>
+				</div>-->
+			<form action="__ROOT__/home/user/edit_task_common_w_wj" method="POST">
+			 <input type="hidden" name="id" value="{$_GET['id']}">
+				<div class="common_task clear">
+<!-- 		         	<a href="__ROOT__/home/user/task_common_w" class="tab">网上申报</a>
+					<a href="__ROOT__/home/user/task_common_w_sd" class="tab">实地考察</a> -->
+					<a href="__ROOT__/home/user/task_common_w_wj" class="tab cur">文件调查</a>
+				</div>
+				<div class="font13">
+					<table class="email_table">
+						<tr>
+							<td colspan="6">
+						        <if condition="$radio eq 1">
+								<label><input type="radio" name="way[]" value="1" class="radio" checked="checked">&nbsp;文明城区</label>
+								<else />
+								<label><input type="radio" name="way[]" value="2" class="radio" checked="checked">&nbsp;未成年人思想道德建设</label>
+								</if>
+							</td>
+						</tr>
+					</table>
+					<if condition="$radio eq 2">
+					    <div class="Hide">
+					<else/>
+					    <div>
+					</if>
+						<table class="email_table">
+							<tr>
+								<td colspan="6">
+									<table class="email_table email_table1"><tr>
+										<td width="70">测评项目：</td>
+										<td><div class="div1">
+											<input type="text" name="shjdw" placeholder="测评项目" value="{$detail.headline}">
+										</div></td>
+									</tr>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="6">
+									<table class="email_table email_table1"><tr>
+										<td width="70">指标名称：</td>
+										<td><div class="div1">
+											<input type="text" name="rwbt" placeholder="指标名称"  value="{$detail.index_name}">
+										</div></td>
+									</tr>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="6">
+									<table class="email_table email_table1"><tr>
+										<td width="70">牵头单位：</td>
+										<td><div class="div1 xldiv">
+										<input type="hidden" name="qtdwid" id="qtdwid" value="{$detail.lead_id}">
+											<input class="select_qiantou" type="text" name="qtdw" placeholder="牵头单位,多个请以';'分隔" value="{$detail.lead_name}">
+										</div></td>
+									</tr></table>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="6">测评内容：</td>
+							</tr>
+							<tr>
+								<td colspan="6"><div class="div2"><textarea name="zysx" placeholder="测评内容">{$detail.title}</textarea></div></td>
+							</tr>
+							<tr>
+								<td colspan="6">问卷主要内容：</td>
+							</tr>
+							<tr>
+								<td colspan="6"><div class="div2"><textarea name="sbcl" placeholder="问卷主要内容">{$detail.test_content}</textarea></div></td>
+							</tr>
+						</table>
+					</div>
+					<if condition="$radio eq 1">
+					<div class="Hide">
+					<else/>
+					<div>
+					</if>
+						<table class="email_table">
+							<tr>
+								<td colspan="6">
+									<table class="email_table email_table1"><tr>
+										<td width="70">测评项目：</td>
+										<td><div class="div1">
+											<input type="text" name="shjdw2" placeholder="测评项目" value="{$detail.headline}">
+										</div></td>
+									</tr>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="6">
+									<table class="email_table email_table1"><tr>
+										<td width="70">牵头单位：</td>
+										<td><div class="div1 xldiv">
+										<input type="hidden" name="qtdwid2" id="qtdwid2" value="{$detail.lead_id}">
+											<input class="select_qiantou" type="text" name="qtdw" placeholder="牵头单位,多个请以';'分隔" value="{$detail.lead_name}">
+										</div></td>
+									</tr></table>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="6">测评标准：</td>
+							</tr>
+							<tr>
+								<td colspan="6"><div class="div2"><textarea name="zysx2" placeholder="测评标准">{$detail.title}</textarea></div></td>
+							</tr>
+							<tr>
+								<td colspan="6">问卷主要内容：</td>
+							</tr>
+							<tr>
+								<td colspan="6"><div class="div2"><textarea name="sbcl2" placeholder="问卷主要内容">{$detail.index_name}</textarea></div></td>
+							</tr>
+						</table>
+					</div>	
+				</div>
+				<div class="email_com nobor font12">
+					<button type="submit" class="buttonc green"><img src="__PUBLIC__/img/fs_03.png"> 发送</button>
+					&nbsp;&nbsp;<a href="__ROOT__/home/User/commonIndex/type/{$_GET['type']}"><button type="button" class="buttonc" style="width: 60px;"> 取消</button></a>
+				</div>
+			</form>
+			</div>
+		</div>
+		
+		<!--new add 2017-4-14-->
+		<!--牵头单位-->
+		<div id="houqinr_qiantou" class="Hide"> 
+		<input type="hidden" class="inputHide" name="" value="{$detail.lead_id}">
+			<div class="houqi_select clear">
+				<div class="L col-6">
+					<div class="houqi_search">
+						<div class="search_txt clear font13">
+							<input class="L" name="search_con" type="text">
+							<span class="R"></span>
+						</div>
+					</div>
+					<div class="h_one">
+						<div class="h_search">
+							<dl>
+								<dd>
+					<!-- 				<div class="Show txt_oneline" data_id="12">相同内容2</div>
+									<div class="Show txt_oneline" data_id="13">搜索内容</div> -->
+								</dd>
+							</dl>
+						</div>
+						<div class="h_content">
+					    <if condition="$dt eq 1 && $return['id'] eq null">
+							<dl>
+								<dt><span class="div_inblock one"><b>没有下属单位</b></span>
+							</dl>
+						<else/>
+							<foreach name="return_data" item="rs">
+								<dl>
+									<dt><span class="div_inblock one"><b>{$rs.name}</b></span><span>(<?php echo count($rs['list']) ?>)</span>
+										<em class="add_all" title="添加整组" style="color: red;float: right"> </em></dt>
+
+									<dd class="clear" style="display: none;">
+										<foreach name="rs['list']" item="item">
+											<div class="Show txt_oneline" data_id="{$item.department_id}">{$item.department_name}</div>
+										</foreach>
+									</dd>
+
+								</dl>
+							</foreach>
+						</if>
+								</div>
+					</div>
+				</div>
+				<div class="R col-6">
+					<div style="padding: 10px; line-height: 10px;">已选择：</div>
+					<div class="h_one">
+						<ul class="houqi_old">
+							<foreach name="old_parent" item="a">
+								<li class="clear"><div class="L txt_oneline">{$a.d_name}</div><div class="R" data_id="{$a.d_id}"></div></li>
+							</foreach>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="center_btn"><button type="button" class="buttonc red houqi_ok">确定</button></div>
+		</div>
+		<!--脚本-->
+		<script>
+			$(function(){
+				//左侧二级菜单动画
+				$("#menu dt").click(function(){
+					if(!$(this).hasClass("on"))
+					{
+						$(this).addClass("on").parents("dl").siblings().children("dt").removeClass("on");
+						$(this).siblings("dd").slideDown(300);
+						$(this).parents("dl").siblings().children("dd").slideUp(300);
+					}
+					
+				});
+				//中间搜索部分
+				
+				//new2017-4-21 start
+				var obj;
+				var input_obj;
+				$(document).on("click",".houqi_select dl dt span",function(){
+					$(this).parent().siblings("dd").toggle();
+				});
+				//选择牵头单位
+				$(".select_qiantou").click(function(){
+					//obj=$(this);
+					obj=$("#houqinr_qiantou");
+					input_obj=$(this);
+					
+					var name="牵头单位";
+					layer.open({
+					  title:name,
+					  type: 1,
+					  skin: 'layui-box', //加上边框
+					  area: ['620px', '422px'], //宽高
+					  content: '<div class="select_tanchu clear"></div>'
+					});
+					$(".select_tanchu").html(obj.html());
+				});
+				//搜索
+				$(document).on("input propertychange",".houqi_search .search_txt input",function(){
+					 var a=$(this);
+					if($(this).val()!=""){
+						$(this).siblings(".R").addClass("delete");
+						$(this).parents(".houqi_search").siblings(".h_one").children(".h_search").show();
+						$(this).parents(".houqi_search").siblings(".h_one").children(".h_content").hide();
+
+					var keyword = $(this).val();
+                    $.ajax({
+                        type:"GET",
+                        url:"__ROOT__/home/document/searchDocumentAjax",
+						data:{keyword:keyword},
+                        success:function(json) {
+                            var data = JSON.parse(json);
+                            // console.log(data);
+                            if (data) {
+                            	// console.log(1);
+                                var str="";
+                                for (var i=0;i<data.length;i++){
+                                	console.log(data[i].list);
+                                	// return;
+                                	for(var j=0;j<data[i].list.length;j++){
+                                		str += '<div class="Show txt_oneline" data_id="'+data[i].list[j].department_id+'">'+data[i].list[j].department_name+'</div>';
+                                	}
+                                }
+                            }
+                            if(str==""){
+                            	str='<div class="Show txt_oneline">没有内容</div>';
+                            }
+                            console.log(str);  
+                            // alert($("#sssss").html());
+                            // $("#sssss").html("");                         
+                            // $("#sssss").html("11111111");
+                            // $("#sssss").children("dl dd").append(str);
+                            a.parents(".houqi_search").siblings(".h_one").find(".h_search dl dd").html(str);
+
+                        }
+                    });
+					}
+					else
+					{
+						$(this).siblings(".R").removeClass("delete");
+						$(this).parents(".houqi_search").siblings(".h_one").children(".h_search").hide();
+						$(this).parents(".houqi_search").siblings(".h_one").children(".h_content").show();
+					}
+				
+				});
+				//置为空
+				$(document).on("click",".houqi_search .search_txt .delete",function(){
+					$(this).siblings("input").val("");
+					$(this).parents(".houqi_search").siblings(".h_one").children(".h_search").hide();
+					$(this).parents(".houqi_search").siblings(".h_one").children(".h_content").show();
+					$(this).removeClass("delete");
+				});
+				//单个选择添加
+				$(document).on("click",".select_tanchu dl dd div",function(){
+					var s_id=$(this).attr("data_id");
+					var s_name=$(this).html();
+					//判断是否有重复
+					var old_id=[];
+					var panduan=true;
+					for(var i=0;i<$(this).parents(".houqi_select").find(".houqi_old .R").length;i++)
+					{
+						old_id[i]=$(this).parents(".houqi_select").find(".houqi_old .R:eq("+i+")").attr("data_id");
+						if(s_id==old_id[i])
+						{
+							panduan=false;
+						}
+					}
+					if(panduan)
+					{
+						var add_str='<li class="clear"><div class="L txt_oneline">'+s_name+'</div><div class="R" data_id="'+s_id+'"></div></li>';
+						$(this).parents(".houqi_select").find(".houqi_old").append(add_str);
+					}
+					
+				});
+				//添加全部
+				$(document).on("click",".select_tanchu dl dt .add_all",function(){
+					//初始所有选中
+					var old_id=[];
+					for(var i=0;i<$(this).parents(".houqi_select").find(".houqi_old .R").length;i++)
+					{
+						old_id[i]=$(this).parents(".houqi_select").find(".houqi_old .R:eq("+i+")").attr("data_id");
+					}
+					for(var j=0;j<$(this).parents("dt").siblings("dd").find("div").length;j++)
+					{
+						var s_id=$(this).parents("dt").siblings("dd").find("div:eq("+j+")").attr("data_id");
+						var s_name=$(this).parents("dt").siblings("dd").find("div:eq("+j+")").html();
+						//判断是否有重复
+						var panduan=true;
+						for(var k=0;k<old_id.length;k++)
+						{
+							if(s_id==old_id[k])
+							{
+								panduan=false;
+							}
+						}
+						if(panduan)
+						{
+							var add_str='<li class="clear"><div class="L txt_oneline">'+s_name+'</div><div class="R" data_id="'+s_id+'"></div></li>';
+							$(this).parents(".houqi_select").find(".houqi_old").append(add_str);
+						}
+					}
+				});
+				//选择删除
+				$(document).on("click",".select_tanchu .houqi_old li .R",function(){
+					$(this).parents("li").remove();
+				});
+				//后期ok
+				$(document).on("click",".houqi_ok",function(){
+					obj.html($(this).parents(".select_tanchu").html());
+					$(".houqi_search .search_txt .delete").click();
+					var str_id="",str_name="";
+					for(var i=0;i<obj.find(".houqi_old .R").length;i++)
+					{
+						//old_id[i]=$(this).parents(".houqi_select").find(".houqi_old .R:eq("+i+")").attr("data_id");
+						str_id+=obj.find(".houqi_old .R:eq("+i+")").attr("data_id");
+						str_name+=obj.find(".houqi_old .R:eq("+i+")").siblings(".L").html();
+						if(i!=obj.find(".houqi_old .R").length-1)
+						{
+							str_id+=",";
+							str_name+=";";
+						}
+					}
+					obj.find(".inputHide").val(str_id);
+					input_obj.val(str_name);
+					$(".layui-layer-close").click();
+					var b=$('input:radio:checked').val();
+				    var qtdwid_list = $("#houqinr_qiantou .inputHide").val();
+                    if(b==1){
+	                    $("#qtdwid").val(qtdwid_list);
+                    }else{
+
+	                    $("#qtdwid2").val(qtdwid_list);
+                    }
+				});
+				
+				//单选
+				$("input[name='way[]']").change(function(){
+					console.log(1);
+					$(this).parents(".email_table").siblings("div").toggleClass("Hide");
+				});
+				
+			})
+		</script>
+<script>
+    $(function(){
+
+          $('#config').parents("#menu").find("dl,dd").removeClass("on");
+        $('#config').parents("#menu").find("dd").removeClass("Show");
+        $('#config').addClass("on");
+        var type = "{$type}";
+        if (type==1 || type==5 || type==6){
+            $('#cchangguiwm').addClass("on");
+            $('#cchangguiwm').parents("dd").addClass("Show");
+        }else{
+            $('#cchangguiwcn').addClass("on");
+            $('#cchangguiwcn').parents("dd").addClass("Show");
+        }
+
+    })
+</script>
+	</body>
+</html>

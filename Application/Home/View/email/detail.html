@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>南开创文</title>
+		<link rel="stylesheet" href="__PUBLIC__/css/style.css" />
+		<script type="text/javascript" src="__PUBLIC__/js/jquery-1.12.4.min.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/js/layer/layer.js" ></script>
+	</head>
+	<body>
+
+	<include file="_layouts/left_bar" />
+		<!--中间内容-->
+		<div class="content">
+			<div>
+				<div class="emai_rectitle font12">
+					<a href="javascript:history.go(-1);" class="buttonc" style="width: 60px;">返回</a>&nbsp;
+					<if condition="$type eq 1">
+					<a href="__URL__/reply/id/{$email.eid}" class="buttonc green"><img src="__PUBLIC__/img/fs_03.png"> 回复</a>&nbsp;
+					</if>
+				</div>
+				<div class="email_detail">
+					<div class="etop  email_com">
+						<h2><b><?php if($email['email_type']==2){ ?>回复  <?php } ?>{$email.title}</b></h2>
+						<p><em class="graycolor6">发件人：</em>{$email.username}</p>
+						<!-- <p><em class="graycolor6">收件人：</em>{$email.sendname}</p> -->
+						<div class="shousuo_div"><em class="graycolor6">收件人：</em>{$email.sendname}</div>
+						<div class="shousuo_btn"><span class="onb">展开所有</span><span class="ona">收起</span></div>
+						<p><em class="graycolor6">时&nbsp;&nbsp;&nbsp;&nbsp;间：</em>{$email.send_time|date='Y',###}年{$email.send_time|date='m',###}月{$email.send_time|date='d',###}日 {$email.send_time|date='h',###}:{$email.send_time|date='i',###} </p>
+						<p><em class="graycolor6">附&nbsp;&nbsp;&nbsp;&nbsp;件：</em><?php if(!empty($email['pic']) && count($email['pic'])>0){ echo count($email['pic'])."个 (". $email['pic'][0]['pic_name']." 等 )"; ?> <?php }else{ ?>无<?php } ?>&nbsp;<!--<a href="#fujian" class="bluecolor">查看附件</a></p>-->
+					</div>
+					<div class="email_com nobor detail_c">
+						{$email.content}
+					</div>
+					<?php if(!empty($email['pic'])){ ?>
+					<div id="fujian" class="fujian_div">
+						<?php foreach($email['pic'] as $k=>$v){ ?>
+							<a href="__ROOT__{$v.url}" class="bluecolor"><img src="__PUBLIC__/img/icon_07.png"> {$v.pic_name}</a>
+						<?php } ?>
+					</div>
+					<div class="email_com nobor font12">
+					<?php }else{ ?>
+					<div class="email_com nobor font12" style="border-top: 1px solid #2567d6">
+					<?php } ?>
+						<a href="javascript:history.go(-1);" class="buttonc" style="width: 60px;">返回</a>&nbsp;
+						<if condition="$type eq 1">
+							<a href="__URL__/reply/id/{$email.eid}" class="buttonc green"><img src="__PUBLIC__/img/fs_03.png"> 回复</a>&nbsp;
+						</if>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</body>
+</html>
+<script>
+    $('#email').addClass("on");
+    var type = "{$type}";
+//    console.log(type);
+    if (type==1){
+        $('#ereceive').addClass("on");
+	}else{
+        $('#esend').addClass("on");
+	}
+
+	$(".shousuo_btn span").click(function(){
+		$(this).parent().toggleClass("on");
+		$(".shousuo_div").toggleClass("on");
+	})
+</script>

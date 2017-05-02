@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>南开创文</title>
+	<link rel="stylesheet" href="__PUBLIC__/css/style.css" />
+	<script type="text/javascript" src="__PUBLIC__/js/jquery-1.12.4.min.js" ></script>
+	<script type="text/javascript" src="__PUBLIC__/js/layer/layer.js" ></script>
+	<script type="text/javascript" src="__PUBLIC__/js/laydate/laydate.js"></script>
+	        <style>
+         .txt_oneline_new{
+                text-overflow: ellipsis;
+                white-space: nowrap;
+         }
+         .one3_new{
+            width: 200px
+         }
+         input{
+         	width: 300px;
+         	border: 1px solid #DDDDDD;
+            border-radius: 4px;
+         }
+        </style>
+</head>
+<body>
+<include file="_layouts/left_bar" />
+<!--中间内容-->
+<div class="content">
+	<div class="news_detail graycolor6">
+		<a href="__ROOT__/Home/user/detailcommonlist" type="button" class="buttonc green">返回</a>
+		<h1 class="font16 blackcolor">{$detail.headline}</h1>
+		<div class="news_txt" style="border-top: 1px solid #DDDDDD;margin-top: 20px;">
+			<if condition="$type eq 1">
+				<table>
+					<tr>
+						<td width="150">指标名称：</td>
+						<td><input type="text" name="index_name" value="{$detail.index_name}"></td>
+					</tr>
+					<tr>
+						<td>测评内容：</td>
+						<td><input type="text" name="test_content" value="{$detail.test_content}"></td>
+					</tr>
+					<tr>
+						<td>测评标准：</td>
+						<td><input type="text" name="evaluation_standard" value="{$detail.evaluation_standard}"></td>
+					</tr>
+					<tr>
+						<td>网上申报具体要求：</td>
+						<td><input type="text" name="title" value="{$detail.title}"></td>
+					</tr>
+					<tr>
+						<td colspan="3" width="50%">
+							<table class="email_table email_table1"><tr>
+								<td width="70">牵头单位：</td>
+								<td><div class="div1 xldiv">
+								<input type="hidden" name="qtdwid" id="qtdwid">
+									<input class="select_qiantou" type="text" name="qtdw" placeholder="牵头单位,多个请以';'分隔">
+								</div></td>
+							</tr></table>
+						</td>
+						<td colspan="3" width="50%">
+							<table class="email_table email_table1"><tr>
+								<td width="70">责任单位：</td>
+								<td><div class="div1 xldiv">
+								<input type="hidden" name="zrdwid" id="zrdwid">
+									<input type="text" class="select_zeren" name="zrdw" placeholder="责任单位,多个请以';'分隔">
+								</div></td>
+							</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td>责任单位：</td>
+						<td>{$detail.responsibility_name}</td>
+					</tr>
+				</table>
+			<elseif condition="$type eq 2" />
+				<table>
+					<tr>
+						<td width="150">工作任务：</td>
+						<td><input type="text" name="index_name" value="{$detail.index_name}"></td>
+					</tr>
+					<tr>
+						<td>具体内容：</td>
+						<td><input type="text" name="title" value="{$detail.title}"></td>
+					</tr>
+					<tr>
+						<td>上报材料和检查提示：</td>
+						<td><input type="text" name="test_content" value="{$detail.test_content}"></td>
+					</tr>
+					<tr>
+						<td>牵头单位：</td>
+						<td>{$detail.lead_name}</td>
+					</tr>
+					<tr>
+						<td>责任单位：</td>
+						<td>{$detail.responsibility_name}</td>
+					</tr>
+				</table>
+			<elseif condition="$type eq 3" />
+				<table>
+					<tr>
+						<td width="150">测评标准：</td>
+						<td><input type="text" name="index_name" value="{$detail.index_name}"></td>
+					</tr>
+					<tr>
+						<td>实地考察要求：</td>
+						<td><input type="text" name="title" value="{$detail.title}"></td>
+					</tr>
+<!-- 					<tr>
+						<td>牵头单位：</td>
+						<td>{$detail.lead_name}</td>
+					</tr> -->
+					<tr>
+						<td>责任单位：</td>
+						<td>{$detail.responsibility_name}</td>
+					</tr>
+				</table>
+			<elseif condition="$type eq 4" />
+				<table>
+					<tr>
+						<td width="150">问卷主要内容：</td>
+						<td><input type="text" name="index_name" value="{$detail.index_name}"></td>
+					</tr>
+					<tr>
+						<td>测评标准：</td>
+						<td><input type="text" name="title" value="{$detail.title}"></td>
+					</tr>
+					<tr>
+						<td>牵头单位：</td>
+						<td>{$detail.lead_name}</td>
+					</tr>
+<!-- 					<tr>
+						<td>责任单位：</td>
+						<td>{$detail.responsibility_name}</td>
+					</tr> -->
+				</table>
+			<elseif condition="$type eq 6" />
+				<table>
+					<tr>
+						<td width="150">指标名称：</td>
+						<td><input type="text" name="index_name" value="{$detail.index_name}"></td>
+					</tr>
+					<tr>
+						<td>测评内容：</td>
+						<td><input type="text" name="test_content" value="{$detail.test_content}"></td>
+					</tr>
+					<tr>
+						<td>测评标准：</td>
+						<td><input type="text" name="evaluation_standard" value="{$detail.evaluation_standard}"></td>
+					</tr>
+					<tr>
+						<td>实地考察点位及标准：</td>
+						<td><input type="text" name="title" value="{$detail.title}"></td>
+					</tr>
+					<tr>
+						<td>责任单位：</td>
+						<td>{$detail.responsibility_name}</td>
+					</tr>
+				</table>
+			<elseif condition="$type eq 5" />
+				<table>
+					<tr>
+						<td width="150">指标名称：</td>
+						<td><input type="text" name="index_name" value="{$detail.index_name}"></td>
+					</tr>
+					<tr>
+						<td>问卷主要内容：</td>
+						<td><input type="text" name="test_content" value="{$detail.test_content}"></td>
+					</tr>
+					<tr>
+						<td>测评内容：</td>
+						<td><input type="text" name="title" value="{$detail.title}"></td>
+					</tr>
+					<tr>
+						<td>牵头单位：</td>
+						<td>{$detail.lead_name}</td>
+					</tr>
+				</table>
+			</if>
+		</div>
+		<div class="updownpage clear">
+		</div>
+		<div class="email_com nobor font12">
+			<?php if($detail['d_finish']==1){ ?>
+				<?php if($detail['progress']==1 || $_SESSION['userinfo']['department_id']==1){ ?>
+				<button type="button" class="buttonc orange jindu_gw">进度</button>&nbsp;
+				<?php } ?>
+				创文办已标记完成
+
+			<?php }else{ ?>
+				<!--<if condition="($detail['edit'] eq 1) or ($_SESSION['userinfo']['department_id'] eq 1) " >-->
+				<?php if($detail['progress']==1 || $_SESSION['userinfo']['department_id']==1){ ?>
+					<button type="button" class="buttonc orange jindu_gw">进度</button>&nbsp;
+					<?php if($detail['edit']==1){ ?>
+						<button type="button" class="buttonc blue huibao_gw">汇报</button>&nbsp;
+						<!--执行单位点完成-->
+						<button type="button" class="buttonc red owner_wc_gw" data-id="{$detail.id}">任务完成</button>&nbsp;
+					<?php }elseif($detail['is_finish']==1){ ?>
+						任务已完成
+					<?php } ?>
+					<!--创文办点完成-->
+					<?php if($_SESSION['userinfo']['department_id']==1 && $detail['d_finish'] != 1){ ?>
+						<button type="button" class="buttonc green wancheng_gw">确认完成</button>
+					<?php } ?>
+				<?php } ?>
+			<?php } ?>
+		</div>
+	</div>
+</div>
+<!--脚本-->
+<script>
+    $(function(){
+
+        $('#doc2').parents("#menu").find("dl,dd").removeClass("on");
+        $('#doc2').parents("#menu").find("dd").removeClass("Show");
+        $('#doc2').addClass("on");
+        var type = "{$type}";
+        if (type==1 || type==5 || type==6){
+            $('#cchangguiwm').addClass("on");
+            $('#cchangguiwm').parents("dd").addClass("Show");
+        }else{
+            $('#cchangguiwcn').addClass("on");
+            $('#cchangguiwcn').parents("dd").addClass("Show");
+        }
+
+    })
+</script>
+</body>
+</html>
+<script>
+	$(function () {
+	    var did = "{$detail.id}";
+        //汇报
+        $(".huibao_gw").click(function(){
+            layer.open({
+                title:"任务进度汇报",
+                type: 1,
+                skin: 'layui-box', //加上边框
+                area: ['520px', '320px'], //宽高
+                content: '<form action="__ROOT__/home/DocumentCommon/postHuibaoCommon" method="post" enctype="multipart/form-data">'+
+                '<div><textarea class="huibao_content" placeholder="输入汇报内容" name="message"></textarea></div>' +
+                '<div id="filediv"><a href="javascript:;" class="bluecolor" id="addfile">' +
+                '<img src="__PUBLIC__/img/icon_07.png"> 添加附件</a>'+
+                '<input type="hidden" name="id" value="{$detail.id}" />'+
+//                        '<input type="file" name="photo[]" />'+
+
+                '</div>' +
+                '<div class="center_btn">' +
+                '<button type="submit" onclick="return huibao_ok()" class="buttonc red huibao_ok">确定</button></div>'+
+                '</form>'
+            });
+        });
+
+        $(document).on("click","#addfile",function(){
+            var str = '<input type="file" name="photo[]" />';
+            $("#filediv").append(str);
+        })
+
+        //完成
+        $(".wancheng_gw").click(function(){
+            layer.confirm('确认完成？', {
+                btn: ['是','否'] //按钮
+            }, function(){
+                //layer.msg('已完成');
+                $.ajax({
+                    type:"GET",
+                    data:{did: did},
+                    url:"__ROOT__/home/DocumentCommon/commonFinish",
+                    success:function(e) {
+                        if (e==1){
+                            layer.msg('操作成功');
+                            $(".layui-layer-close").click();
+                            setTimeout(function(){
+                                window.location.reload();
+                            },3000)
+                        }else{
+                            layer.msg('操作失败');
+                        }
+
+                    }
+                });
+
+            }, function(){
+                layer.close();
+            });
+        })
+
+        //完成
+        $(".owner_wc_gw").click(function(){
+            layer.confirm('确认完成？', {
+                btn: ['是','否'] //按钮
+            }, function(){
+                //layer.msg('已完成');
+                $.ajax({
+                    type:"GET",
+                    data:{did: did},
+                    url:"__ROOT__/home/DocumentCommon/commonFinishOwner",
+                    success:function(e) {
+                        if (e==1){
+                            layer.msg('操作成功');
+                            $(".layui-layer-close").click();
+                            setTimeout(function(){
+                                window.location.reload();
+                            },3000)
+                        }else{
+                            layer.msg('操作失败');
+                        }
+
+                    }
+                });
+
+            }, function(){
+                layer.close();
+            });
+        })
+        //进度查看
+        $(".jindu_gw").click(function(){
+            $.ajax({
+                type:"GET",
+                data:{did: did },
+                url:"__ROOT__/home/DocumentCommon/jinducommon",
+                success:function(json) {
+//                    console.log(json);return;
+                    var res = JSON.parse(json);
+                    console.log(res.rs);
+                    var str='';
+                    data = res.rs;
+					//str += '<div class="jindu_box"><ul>';
+                    if (data)
+                    {
+                        for(var i=0;i<data.length;i++){
+                        	if(data[i].send_time == null){
+                        		var time ='2017/1/1';
+                        		var time1 = '上午8:00:00';
+                        	}else{
+                        		var time = getLocalDate(data[i].send_time);
+                        		var time1 = getLocalTime(data[i].send_time);
+                        	}
+                            str += '<li class="clear">\
+										<div class="L one1">'+time+'</div>\
+										<div class="L one1" style="width: 88px;">'+time1+'</div>\
+										<div class="L one3_new"><div class="L one31 txt_oneline">'+data[i].d_name+'&nbsp;</div> ';
+                            str += '</div><div class="L one1">'+data[i].r_content;
+                            if (data[i].file != null){
+                                for(var j=0;j<data[i].file.length;j++) {
+                                    str += '<div style="min-width:500px"><a href="__ROOT__'+data[i].file[j].picture_url+'" class="bluecolor"><img src="__PUBLIC__/img/icon_07.png"> '+data[i].file[j].picture_name+'</a></div>';
+                                }
+                            }
+                        }
+                        str+='</div></li>';
+                    }
+                    console.log(str);
+                  //  str='';
+                    layer.open({
+                        title:"任务进度",
+                        type: 1,
+                        skin: 'layui-box', //加上边框
+                        area: ['750px', '320px'], //宽高
+                        content: "<div class='jindu_box'><ul>"+str+"</ul></div>"
+                    });
+                }
+            });
+
+        });
+
+        function getLocalDate(nS) {
+            return new Date(parseInt(nS) * 1000).toLocaleString().substr(0,9)
+        }
+        function getLocalTime(nS) {
+            return new Date(parseInt(nS) * 1000).toLocaleString().substr(9,13)
+        }
+
+
+    })
+
+</script>

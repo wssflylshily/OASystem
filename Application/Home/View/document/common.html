@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>南开创文</title>
+		<link rel="stylesheet" href="__PUBLIC__/css/style.css" />
+		<script type="text/javascript" src="__PUBLIC__/js/jquery-1.12.4.min.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/js/layer/layer.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/js/laydate/laydate.js"></script>
+	</head>
+	<body>
+	<include file="_layouts/left_bar" />
+		<!--中间内容-->
+		<div class="content">
+			<div>
+				<form action="" method="get">
+				<div class="emai_rectitle font12 clear">
+					<div class="L margin_r">
+					    <select name="type" class="slect_one">
+						    <option value="0">选择类型</option>
+							<option value="1" <if condition="1 eq $_GET['type']">selected</if>>1</option>
+							<option value="2" <if condition="2 eq $_GET['type']">selected</if>>2</option>
+							<option value="3" <if condition="3 eq $_GET['type']">selected</if>>3</option>
+						</select>
+					</div>
+					<div class="L margin_r"><select name="finish" class="slect_one">
+						<option value="0">任务状态</option>
+						<option value="1" <if condition="1 eq $_GET['finish']">selected</if>>已完成</option>
+						<option value="-1" <if condition="-1 eq $_GET['finish']">selected</if>>未完成</option>
+					</select>
+					</div>
+					<div class="L margin_r">
+						发布时间范围：
+						<input class="slect_one" type="text" onclick="laydate()" value="{$_GET['start']}" name="start" placeholder="开始时间">~
+						<input class="slect_one" type="text" onclick="laydate()" value="{$_GET['end']}" name="end" placeholder="结束时间">
+					</div>
+					<div class="L margin_r"><input style="padding: 1px;border-width: 2px;border-style: inset;border-color: initial;" type="text" name="keyword" value="{$keyword}" placeholder="请输入要查询的内容"></div>
+					<div class="L"><button type="submit" class="buttonc green refresh_gw"><img src="__PUBLIC__/img/an_08.png"> 刷新</button></div>
+					<!--<div class="R">
+						<ul class="list_screen screen_finish clear"><li class="on L one">全部</li><li class="L two">已完成</li><li class="L three">未完成</li></ul>
+					</div>-->
+				</div>
+				<if condition="$_GET['keyword'] neq null">
+					<div style="margin:60px 0 0 0">
+					<label class="L" style="margin-right:20px">
+					     <input name="key2" type="radio" class="checkbox" value="0" <if condition="0 eq $_GET['key2']">checked="checked"</if>/>&nbsp;全部</label>
+					<label class="L" style="margin-right:20px">
+					     <input name="key2" type="radio" class="checkbox" value="1" <if condition="1 eq $_GET['key2']">checked="checked"</if> />&nbsp;主题 </label>
+					     <label class="L" style="margin-right:20px">
+					     <input name="key2" type="radio" class="checkbox" value="2" <if condition="2 eq $_GET['key2']">checked="checked"</if> />&nbsp;正文 </label>
+					     <label class="L" style="margin-right:20px">
+					     <input name="key2" type="radio" class="checkbox" value="3" <if condition="3 eq $_GET['key2']">checked="checked"</if>/>&nbsp;主题+正文 </label>
+					     <label class="L" style="margin-right:20px">
+					     <input name="key2" type="radio" class="checkbox" value="4" <if condition="4 eq $_GET['key2']">checked="checked"</if>/>&nbsp;牵头单位+责任单位 </label>
+					     
+					</div>
+				</if>
+				</form>
+				<div class="email_reul">
+					<table class="gongwen_table" width="100%" cellspacing="0">
+						<tr class="font13 tr1">
+							<td width="110">任务序号</td>
+							<!-- <td>类型</td> -->
+							<td width="250">任务标题</td>
+							<td>牵头单位</td>
+							<td>责任单位</td>
+							<td width="150">完成时间</td>
+							<td width="164" align="center">操作</td>
+						</tr>	
+						<foreach name="rs" item="detail">
+						<tr>
+							<td class="font13"><div class="txt_oneline one1">{$detail.doc_sn}</div></td>
+							<!-- <td>{$detail.sudden_category_name}</td> -->
+							<td class="font13"><a href="__ROOT__/home/document/detailcommon/id/{$detail.did}/type/2" class="txt_oneline L blackcolor one2">{$detail.title}</a></td>
+							<td class="font13"><div class="txt_oneline one1" title="<?php if($detail['lead_name'])echo $detail['lead_name']; ?>"><?php if($detail['lead_name'])echo $detail['lead_name']; ?></div></td>
+							<td class="font13"><div class="txt_oneline one1" title="<?php if($detail['lead_name'])echo $detail['responsibility_name']; ?>"><?php if($detail['responsibility_name'])echo $detail['responsibility_name']; ?></div></td>
+							<td class="font13"><div class="txt_oneline one1">{$detail.send_time|date='Y-m-d',###}</div></td>
+							<td class="font12" align="center">
+								<if condition="$detail.d_finish eq 1">
+									已确认完成
+								<elseif condition="$detail.edit eq 1" />
+								<button type="button" class="buttonc red cuiban_gw" data-id="{$detail.did}">反馈</button>&nbsp;
+								<if condition="$_SESSION['userinfo']['department_id'] eq 1">
+								<button type="button" class="buttonc green wancheng_gw" data-id="{$detail.did}">完成</button>
+								</if>
+								<else />
+								   没有操作权限
+								</if>
+							</td>
+						</tr>
+						</foreach>
+					</table>
+				</div>
+				<div class="email_com nobor pagemore font13">
+					<!--<a href="#" class="on">1</a><a href="#">1</a><a href="#">1</a><a href="#">1</a>-->
+					{$page}
+				</div>
+			</div>
+		</div>
+		<!--脚本-->
+		<script>
+			$(function(){
+
+                $('#doc').parents("#menu").find("dl,dd").removeClass("on");
+                $('#doc').parents("#menu").find("dd").removeClass("Show");
+                $('#doc').addClass("on");
+                $('#dcommon').addClass("on");
+                $('#dcommon').parents("dd").addClass("Show");
+
+				//类型筛选
+				$("select[name='leixing_screen']").change(function(){
+					//alert(1);
+				});
+				//完成筛选
+				$(".screen_finish li").click(function(){
+					var str=$(this).html();//全部，已完成，未完成
+					$(this).addClass("on").siblings().removeClass("on");
+					
+				});
+				//刷新
+				$(".refresh_gw").click(function(){
+					//window.location.reload();
+				});
+				//催办
+				$(".cuiban_gw").click(function(){
+                    var did = $(this).attr('data-id');
+					layer.open({
+					  title:"任务反馈",
+					  type: 1,
+					  skin: 'layui-box', //加上边框
+					  area: ['520px', '290px'], //宽高
+					  content: '<div><textarea class="huibao_content" placeholder="输入反馈内容"></textarea></div><div class="center_btn"><button type="button" class="buttonc red huibao_ok" data-id="'+did+'">确定</button></div>'
+					});
+				});
+				//催办完成
+				$(document).on("click",".huibao_ok",function(){
+                    var did = $(this).attr('data-id');
+					//alert()
+					var html=$(".huibao_content").val();
+					if(html=="")
+					{
+						layer.msg('任务反馈内容不能为空');
+					}
+					else
+					{
+						console.log(html);
+                        $.ajax({
+                            type:"GET",
+                            data:{message: html, did: did ,type:1},
+                            url:"__ROOT__/home/document/feedback_common",
+                            success:function(e) {
+                                if (e==1){
+                                    layer.msg('反馈成功');
+                                    $(".layui-layer-close").click();
+                                    setTimeout(function(){
+                                        window.location.reload();
+                                    },3000)
+                                }else{
+                                    layer.msg('反馈失败');
+                                }
+                            }
+                        });
+					}
+				});
+				//完成
+				$(".wancheng_gw").click(function(){
+				    var did = $(this).attr('data-id');
+					layer.confirm('确认完成？', {
+					  btn: ['是','否'] //按钮
+					}, function(){
+						//layer.msg('已完成');
+					 $.ajax({
+                        type:"GET",
+                            data:{did: did},
+                        url:"__ROOT__/home/document/commonFinish",
+                            success:function(e) {
+                            if (e==1){
+                                layer.msg('操作成功');
+                                $(".layui-layer-close").click();
+                                setTimeout(function(){
+                                    window.location.reload();
+                                },3000)
+                            }else{
+                                layer.msg('操作失败');
+                            }
+
+                        }
+                    });
+
+					}, function(){
+						layer.close();
+					});
+				})
+			})
+		</script>
+	</body>
+</html>

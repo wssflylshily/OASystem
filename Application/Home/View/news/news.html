@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>南开创文</title>
+		<link rel="stylesheet" href="__PUBLIC__/css/style.css" />
+		<script type="text/javascript" src="__PUBLIC__/js/jquery-1.12.4.min.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/js/layer/layer.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/js/laydate/laydate.js"></script>
+	</head>
+	<body>
+	<include file="_layouts/left_bar" />
+		<!--中间内容-->
+		<div class="content">
+			<div>
+				<div class="emai_rectitle font16 clear">
+
+					<div style="float: left">
+						<img src="__PUBLIC__/img/news_03.png">&nbsp;<b>最新公告</b>
+					</div>
+					<div style="float: left; margin-left: 20px;" class="font12">
+						<form method="get" action="">
+							<div class="L margin_r">
+								发布时间范围：
+								<input class="slect_one" type="text" onclick="laydate()" value="{$_GET['start']}" name="start" placeholder="开始时间">~
+								<input class="slect_one" type="text" onclick="laydate()" value="{$_GET['end']}" name="end" placeholder="结束时间">
+							</div>
+							<div class="L"><button type="submit" class="buttonc green refresh_gw"><img src="__PUBLIC__/img/an_08.png"> 刷新</button></div>
+						</form>
+					</div>
+				</div>
+				<div class="news">
+					<ul class="news_jianbao news_new">
+						<foreach name="news" item="item">
+						<li class="clear">
+							<div class="font_div L">
+								<h2 class="txt_oneline"><a href="__ROOT__/home/news/detail/id/{$item.nid}/type/1" class="blackcolor Show txt_oneline">【{$item.type_name}】{$item.title}</a></h2>
+								<div class="font_d txt_twoline font13 graycolor">
+									{$item.desc}
+								</div>
+							</div>
+							<div class="time_div R">{$item.created_time|date='Y-m-d H:i:s',###}</div>
+						</li>
+						</foreach>
+					</ul>
+				</div>
+				<div class="email_com nobor pagemore font13">
+					{$page}
+				</div>
+			</div>
+		</div>
+		<!--脚本-->
+		<script>
+			$(function(){
+
+			})
+		</script>
+	</body>
+</html>
+<script>
+    $('#news').parents("#menu").find("dl,dd").removeClass("on");
+    $('#news').parents("#menu").find("dd").removeClass("Show");
+    $('#news').addClass("on");
+    $('#nnews').addClass("on");
+    $('#nnews').parents("dd").addClass("Show");
+</script>

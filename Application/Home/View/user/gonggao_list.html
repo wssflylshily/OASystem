@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>南开创文</title>
+		<link rel="stylesheet" href="__PUBLIC__/css/style.css" />
+		<script type="text/javascript" src="__PUBLIC__/js/jquery-1.12.4.min.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/js/layer/layer.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/js/laydate/laydate.js"></script>
+
+		<script>
+			$(function () {
+			 $("#submit").click(function () {
+                 var start = $("#startday").val();
+                 var end = $("#endday").val();
+                 var keyword = $(".input-keyword").val()?$(".input-keyword").val():'';
+//                 if(start || end) {
+//                     if(!start){
+//                         layer.msg("请选择开始时间", {icon: 2});
+//                         return false;
+//                     }else if(!end){
+//                         layer.msg("请选择结束时间", {icon: 2});
+//                         return false;
+//					 }
+//                 }
+                 window.location.href = "{:U('Home/User/gonggao_list')}?start="+start+"&end="+end+"&keyword="+keyword;
+             })
+			})
+		</script>
+		<style>
+			.input-keyword{
+				border:solid 1px #ccc;
+				border-radius: 5px;
+				padding-left: 8px;
+			}
+		</style>
+	</head>
+	<body>
+		<!--leftbar-->
+        <include file="_layouts/left_bar" />
+		<!--中间内容-->
+		<div class="content">
+			<div>
+				<div class="emai_rectitle font12">
+					<label><input type="checkbox" id="check_all" name="check_all" class="checkbox" />&nbsp;全选</label>&nbsp;
+					<button type="button" class="buttonc red delete_yh"><img src="__PUBLIC__/img/an_06.png"> 删除</button>&nbsp;
+					<a href="__ROOT__/home/user/add_news"  class="buttonc blue add_yh"><img src="__PUBLIC__/img/an_09.png"> 添加</button>&nbsp;</a>
+
+					<span style="margin-left: 12px;">关键词:</span>
+					<input type="text" placeholder="请输入公告标题" class="input-keyword" name="keyword" value="{$_GET['keyword']}">
+					
+					<span style="margin-left: 12px;">发布时间范围</span>：
+					<input class="slect_one" id="startday" type="text" onclick="laydate()" value="{$_GET['start']}" name="start" placeholder="开始时间">
+					<input class="slect_one" id="endday" type="text" onclick="laydate()" value="{$_GET['end']}" name="end" placeholder="结束时间">
+					<button type="button" id="submit" class="buttonc green"><img src="__PUBLIC__/img/an_08.png"> 刷新</button>&nbsp;
+				</div>
+				<div class="email_reul">
+					<table class="gongwen_table" width="100%" cellspacing="0">
+						<tr class="font13 tr1">
+							<td width="30">&nbsp;</td>
+							<td width="260">标题</td>
+							<td >简述</td>
+							<td width="200">开放部门名称</td>
+							<td align="center" width="200">创建时间</td>
+							<td width="160" align="center">操作</td>
+						</tr>
+					<foreach name="news" item="v" key="k">
+						<tr>
+							<td><label><input name="email_num" type="checkbox" class="checkbox" value="{$v.id}"/></label></td>
+							<td class="font13"><div style="width: 260px;" class="txt_oneline">{$v.title}</div></td>
+							<td class="font13 font_d"><div class="txt_twoline">{$v.desc}</div></td>
+							<td class="font13"><div style="width:200px">{$v.name_list}</div></td>
+							<td align="center" class="font13"><div style="width: 200px">{$v.create_time|date="Y-m-d H:i:s",###}</div></td>
+							<td class="font12" align="center">
+								<div style="width: 160px">
+							<a href="__ROOT__/home/user/gonggao_detail/id/{$v.id}"  class="buttonc blue">编辑</a>
+							&nbsp;
+							<button type="button" class="buttonc red deleteone_yh" data-id="{$v.id}">删除</button>
+									</div>
+							</td>
+						</tr>
+					</foreach>
+					</table>
+				</div>
+				<div class="email_com nobor pagemore font13">
+					{$page}
+				</div>
+			</div>
+		</div>
+		<!--脚本-->
+		<script>
+		    function re_his() {
+		    	window.history.back();
+		    }
+			$(function(){
+				//刷新
+				$(".refresh_yh").click(function(){
+					window.location.reload();
+				});
+				//删除
+				$(".delete_yh").click(function(){
+					//if()
+			        var chk_value =[];
+			        $('input[name="email_num"]:checked').each(function(){
+			            chk_value.push($(this).val());
+			        });
+			        if (chk_value.length==0)
+					{
+					    alert('你还没有选择任何内容！');
+					    return;
+					}
+					layer.confirm('确认删除？', {
+					  btn: ['是','否'] //按钮
+					}, function(){
+						$.ajax({
+				            type:'get',
+				            url:'{:U("Home/User/gonggao_delete")}',
+				            data:{id:chk_value},
+				            success:function(res) {
+								location=location;
+				            },
+				            error: function(){
+				                layer.msg('网络失败，请刷新页面后重试');
+							    return false;
+				            }
+				        });
+						layer.msg('删除成功');
+					}, function(){
+						layer.close();
+					});
+				});
+				$(".deleteone_yh").click(function(){
+				   var id = $(this).attr('data-id');
+					layer.confirm('确认删除？', {
+					  btn: ['是','否'] //按钮
+					}, function(){
+						$.ajax({
+			              type : 'post',
+			              url : '{:U("Home/User/gonggao_del")}',
+			              data : {id:id},
+			              dataType : 'json',
+			              success : function(res){
+			                if(res.status == 1){
+						          location=location;
+			                }else{
+			                      layer.msg(res.msg);
+						          return false;
+			                }
+			              },
+			              error : function(XMLHttpRequest, textStatus, errorThrown) {
+			                layer.msg('网络失败，请刷新页面后重试');
+						    return false;
+			              }
+			            })
+						layer.msg('删除成功');
+					}, function(){
+						layer.close();
+					});
+				});
+				//新增-xiugai
+				var edit_zt=0;
+				$(".add_yh").click(function(){
+					// layer.open({
+					//   title:"添加用户",
+					//   type: 1,
+					//   skin: 'layui-box', //加上边框
+					//   area: ['520px', '322px'], //宽高
+					//   content: '<div class="add_form"><table width="100%"><tr><td width="70">姓&nbsp;&nbsp;名：</td><td><div class="div1"><input type="text" name="name" placeholder="输入姓名" /></div></td></tr><tr><td>手&nbsp;&nbsp;机&nbsp;&nbsp;号：</td><td><div class="div1"><input name="tel" type="number" placeholder="输入手机号" /></div></td></tr><tr><td>所属单位：</td><td><div class="xlk div1"><input name="ssdw" type="text" placeholder="选择所属单位" /></div></td></tr></table></div><div class="center_btn"><button  class="buttonc red user_add" data-id="" >确定</button></div>'
+					// });
+					// var str='<div class="select_box Hide"><input type="hidden" name="d_id"><div class="ulcontent"><ul><foreach name="department" item="v" key="k"><li class="txt_oneline" data-id="{$v.id}">{$v.d_name}</li></foreach></ul></div></div>';
+
+					// $(".xlk").append(str);
+					// $(".xlk").hover(function(){},function(){
+					// 	$(this).children(".select_box").hide();
+					// });
+
+					if($(this).hasClass("bianji_yh"))
+					{
+						$(".layui-layer-title").html("编辑用户");
+
+						var namestr=$(this).parents("tr").children("td:nth-child(2)").html();
+						var nametel=$(this).parents("tr").children("td:nth-child(3)").html();
+						var namedw=$(this).parents("tr").children("td:nth-child(4)").html();
+
+
+						// $(".select_box .ulcontent li").parents(".select_box").siblings("input").val($(this).html());
+						// $(".select_box .ulcontent li").parents(".select_box").hide();
+						var id = $(".select_box .ulcontent li").attr('data-id');
+                        $(".select_box .ulcontent li").parents(".ulcontent").siblings("input").val(id);
+
+						var user_id = $(this).attr('data-id');
+                        $(".user_add").attr('data-id',user_id);
+
+						$("input[name='name']").val(namestr);
+						$("input[name='tel']").val(nametel);
+						$("input[name='ssdw']").val(namedw);
+						edit_zt=1;
+					}
+					else
+					{
+						edit_zt=0;
+					}
+
+
+				});
+				$(document).on("click",".select_box .ulcontent li",function(){
+						//类型选择
+						$(this).parents(".select_box").siblings("input").val($(this).html());
+						$(this).parents(".select_box").hide();
+
+                        var id = $(this).attr('data-id');
+                        $(this).parents(".ulcontent").siblings("input").val(id);
+					}
+				);
+				//添加完成
+				$(document).on("click",".user_add",function(){
+
+					var name=$("input[name='name']").val();
+					var tel=$("input[name='tel']").val();
+					var ssdw=$("input[name='d_id']").val();
+					var user_id = $(this).attr('data-id');
+					if(name=="")
+					{
+						layer.msg('姓名不能为空');
+						return false;
+					}
+					if(tel=="")
+					{
+						layer.msg('电话不能为空');
+						return false
+					}
+					if(ssdw=="")
+					{
+						layer.msg('所属单位不能为空');
+						return false
+					}
+					if(edit_zt==0)
+					{
+						//新增
+						$.ajax({
+			              type : 'post',
+			              url : '{:U("Home/User/add_user")}',
+			              data : {name:name,tel:tel,ssdw:ssdw},
+			              dataType : 'json',
+			              success : function(res){
+			                if(res.status == 1){
+                              	  layer.msg(res.msg);
+						          location=location;
+			                }else{
+			                      layer.msg(res.msg);
+						          return false;
+			                }
+			              },
+			              error : function(XMLHttpRequest, textStatus, errorThrown) {
+			                layer.msg('网络失败，请刷新页面后重试');
+						    return false;
+			              }
+			            })
+						console.log("新增");
+					}
+					else
+					{
+					    // var user_id = $(this).attr('data-id');
+					    // alert(user_id);
+						//修改
+						$.ajax({
+			              type : 'post',
+			              url : '{:U("Home/User/edit_user")}',
+			              data : {id:user_id,name:name,tel:tel,ssdw:ssdw},
+			              dataType : 'json',
+			              success : function(res){
+			                if(res.status == 1){
+                              	  layer.msg(res.msg);
+						          location=location;
+			                }else{
+			                      layer.msg(res.msg);
+						          return false;
+			                }
+			              },
+			              error : function(XMLHttpRequest, textStatus, errorThrown) {
+			                layer.msg('网络失败，请刷新页面后重试');
+						    return false;
+			              }
+			            })
+						//修改
+						console.log("修改");
+
+					}
+					//console.log(html);
+					$(".layui-layer-close").click();
+				});
+				//获取焦点时显示或隐藏
+				$(document).on("focusin",".xlk input",function(){
+					$(this).siblings(".select_box").show();
+				});
+				$(document).on("input propertychange",".xlk input",function(){
+					$(this).siblings(".select_box").show();
+				});
+				$(document).on("click",".select_box .ulcontent li",function(){
+					$(this).parents(".select_box").siblings("input").val($(this).html());
+					$(this).parents(".select_box").hide();
+				})
+			})
+
+		</script>
+		<!--全选的js-->
+		<script type="text/javascript" src="__PUBLIC__/js/quanxuan.js" ></script>
+	</body>
+</html>
+<script>
+    $('#config').parents("#menu").find("dl,dd").removeClass("on");
+    $('#config').parents("#menu").find("dd").removeClass("Show");
+    $('#config').addClass("on");
+    $('#cgonggao').addClass("on");
+    $('#cgonggao').parents("dd").addClass("Show");
+</script>

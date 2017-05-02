@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>南开创文</title>
+		<link rel="stylesheet" href="__PUBLIC__/css/style.css" />
+		<script type="text/javascript" src="__PUBLIC__/js/jquery-1.12.4.min.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/js/layer/layer.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/js/laydate/laydate.js"></script>
+	</head>
+	<body>
+		<include file="_layouts/left_bar" />
+		<!--中间内容-->
+		<div class="content">
+			<div>
+				<form action="" method="get">
+				<div class="emai_rectitle font12 clear">
+					<div class="L margin_r"><select name="type" class="slect_one">
+						<option value="0">选择类型</option>
+						<foreach name="cate" item="hd">
+							<option value="{$hd['id']}" <if condition="$hd['id'] eq $_GET['type']">selected</if>>{$hd['sudden_category_name']}</option>
+						</foreach></select>
+					</div>
+					<div class="L margin_r"><select name="read" class="slect_one">
+						<option value="0">信息状态</option>
+						<option value="1" <if condition="1 eq $_GET['read']">selected</if>>已读</option>
+						<option value="-1" <if condition="-1 eq $_GET['read']">selected</if>>未读</option>
+						</select>
+					</div>
+					<div class="L margin_r"><select name="finish" class="slect_one">
+						<option value="0">任务状态</option>
+						<option value="1" <if condition="1 eq $_GET['finish']">selected</if>>已完成</option>
+						<option value="-1" <if condition="-1 eq $_GET['finish']">selected</if>>未完成</option>
+						</select>
+					</div>
+					<div class="L margin_r">
+						发布时间范围：
+						<input class="slect_one" type="text" onclick="laydate()" value="{$_GET['start']}" name="start" placeholder="开始时间">~
+						<input class="slect_one" type="text" onclick="laydate()" value="{$_GET['end']}" name="end" placeholder="结束时间">
+					</div>
+					<!--<div class="L margin_r">
+						<ul class="list_screen screen_read clear"><li class="on L one">全部</li><li class="L two">已读</li><li class="L three">未读</li></ul>
+					</div>-->
+					<div class="L margin_r" style="line-height: 25px;"><span>有 <b class="redcolor">{$count}</b> 封未读任务</span></div>
+					<div class="L"><button type="submit" class="buttonc green refresh_gw"><img src="__PUBLIC__/img/an_08.png"> 刷新</button></div>
+					
+					<!--<div class="R">
+						<ul class="list_screen screen_finish clear"><li class="on L one">全部</li><li class="L two">已完成</li><li class="L three">未完成</li></ul>
+					</div>-->
+				</div>
+				</form>
+
+				<div class="email_reul">
+					<table class="gongwen_table" width="100%" cellspacing="0">
+						<tr class="font13 tr1">
+							<td width="110">发文单位</td>
+							<td>类型</td>
+							<td width="250">任务标题</td>
+							<td>牵头单位</td>
+							<td>责任单位</td>
+							<td width="164" align="center">操作</td>
+						</tr>
+						<foreach name="rs" item="notice">
+						<tr <if condition="-1 eq $notice['toread']"> class="wd"</if>>
+							<td class="font13"><div class="txt_oneline one1">{$notice.d_name}</div></td>
+							<td>{$notice.sudden_category_name}</td>
+							<td class="font13"><a href="__ROOT__/home/document/detail/id/{$notice.did}/type/1" class="txt_oneline L blackcolor one2">{$notice.title}</a><if condition="($notice['cui'] eq 1)"><i class="L cui">催</i></if></td>
+							<td class="font13"><div class="txt_oneline one1" title="<?php if($notice['lead_name'])echo $notice['lead_name']; ?>"><?php if($notice['lead_name'])echo $notice['lead_name']; ?></div></td>
+							<td class="font13"><div class="txt_oneline one1" title="<?php if($notice['responsibility_name'])echo $notice['responsibility_name']; ?>"><?php if($notice['responsibility_name'])echo $notice['responsibility_name']; ?></div></td>
+							<td class="font12" align="center">
+								<if condition="$notice.sdfinish eq 1">
+									已完成
+								<else />
+								<button type="button" class="buttonc blue huibao_gw" data-id="{$notice.did}">汇报</button>&nbsp;
+								<button type="button" class="buttonc green wancheng_gw" data-id="{$notice.did}">完成</button>
+								</if>
+							</td>
+						</tr>
+						</foreach>
+					</table>
+				</div>
+				<div class="email_com nobor pagemore font13">
+					<!--<a href="#" class="on">1</a><a href="#">1</a><a href="#">1</a><a href="#">1</a>-->
+					{$page}
+				</div>
+			</div>
+		</div>
+		<!--脚本-->
+	</body>
+</html>
+<script>
+	$(function () {
+        $('#doc').parents("#menu").find("dl,dd").removeClass("on");
+        $('#doc').parents("#menu").find("dd").removeClass("Show");
+        $('#doc').addClass("on");
+        $('#dreceive').addClass("on");
+        $('#dreceive').parents("dd").addClass("Show");
+
+        //汇报弹窗
+        /*$(".huibao_gw").click(function(){
+            layer.open({
+                title:"任务进度汇报",
+                type: 1,
+                skin: 'layui-box', //加上边框
+                area: ['520px', '320px'], //宽高
+                content: '<div><textarea class="huibao_content" placeholder="输入汇报内容"></textarea></div><div><a href="javascript:;" class="bluecolor"><img src="__PUBLIC__/img/icon_07.png"> 添加附件<i class="graycolor">（最大</i><i class="redcolor">1G</i><i class="graycolor">）</i></a><a href="javascript:;" class="bluecolor"><img src="__PUBLIC__/img/icon_09.png"> 上传图片<i class="graycolor">（最大</i><i class="redcolor">1G</i><i class="graycolor">）</i></a></div><div class="center_btn"><button type="button" class="buttonc red huibao_ok"  data-id="{$notice.did}">确定</button></div>'
+            });
+        });*/
+        $(".huibao_gw").click(function(){
+            var did = $(this).attr('data-id');
+            layer.open({
+                title:"任务进度汇报",
+                type: 1,
+                skin: 'layui-box', //加上边框
+                area: ['520px', '320px'], //宽高
+                content: '<form action="__ROOT__/home/Document/postHuibao" method="post" enctype="multipart/form-data">'+
+                '<div><textarea class="huibao_content" placeholder="输入汇报内容" name="message"></textarea></div>' +
+                '<div id="filediv"><a href="javascript:;" class="bluecolor" id="addfile">' +
+                '<img src="__PUBLIC__/img/icon_07.png"> 添加附件</a>'+
+                '<input type="hidden" name="did" value="{$detail.did}" />'+
+//                '<input type="file" name="photo[]" />'+
+                '</div>' +
+                '<div class="center_btn">' +
+                '<button type="submit" data-id="'+did+'" class="buttonc red huibao_ok">确定</button></div>'+
+                '</form>'
+            });
+        });
+        $(document).on("click","#addfile",function(){
+            var str = '<input type="file" name="photo[]" />';
+            $("#filediv").append(str);
+        })
+        //汇报完成
+        $(document).on("click",".huibao_ok",function(){
+            var html=$(".huibao_content").val();
+			var did = $(this).attr('data-id');
+            if(html=="")
+            {
+                layer.msg('汇报内容不能为空');
+            }
+            else
+            {
+                console.log(html);
+
+                $.ajax({
+                    type:"GET",
+                    data:{message: html, did: did ,type:2},
+                    url:"__ROOT__/home/document/cuiban",
+                    success:function(e) {
+                        if (e==1){
+                            layer.msg('汇报成功');
+                            $(".layui-layer-close").click();
+                            setTimeout(function(){
+                                window.location.reload();
+                            },3000)
+                        }else{
+                            layer.msg('汇报失败');
+                        }
+                    }
+                });
+            }
+        });
+        //完成
+        $(".wancheng_gw").click(function(){
+            var did = $(this).attr('data-id');
+            layer.confirm('确认完成？', {
+                btn: ['是','否'] //按钮
+            }, function(){
+                //layer.msg('已完成');
+                $.ajax({
+                    type:"GET",
+                    data:{did: did},
+                    url:"__ROOT__/home/document/receiveDocFinish",
+                    success:function(e) {
+                        if (e==1){
+                            layer.msg('操作成功');
+                            $(".layui-layer-close").click();
+                            setTimeout(function(){
+                                window.location.reload();
+                            },3000)
+                        }else{
+                            layer.msg('操作失败');
+                        }
+
+                    }
+                });
+            }, function(){
+                layer.close();
+            });
+        });
+    })
+</script>

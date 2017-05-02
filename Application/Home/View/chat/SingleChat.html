@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>南开区政府</title>
+		<link rel="stylesheet" href="__PUBLIC__/css/style.css" />
+		<script type="text/javascript" src="__PUBLIC__/js/jquery-1.12.4.min.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/js/layer/layer.js" ></script>
+	</head>
+	<body>
+	<include file="_layouts/left_bar" />
+		<!--中间内容-->
+		<div class="content i_content" style="margin-bottom: 0px;">
+			<div style="padding:30px 30px;">
+				<div class="Hide" style="padding: 100px 0px; text-align: center; color: #C6C6C6;">选择好友开始聊天~</div>
+				<div class="timely_box">
+					<div class="title" style="position: relative;">
+						<h2 class="bluecolor" style="font-weight: bold;">{$userinfo.name}</h2>
+						<div class="font12 graycolor">{$userinfo.d_name}</div>
+						<input type="hidden" name="user_id" value="{$userinfo.id}">
+						<!--<div class="now_perzu" style="position: absolute; right: 10px; top: 10px;"><img src="img/i_img_60.png"></div>-->
+					</div>
+					<div class="timely_content">
+						<div class="history font13"><a href="javascript:;" class="check_history">查看历史消息</a></div>
+						<div id="history"></div>
+						<ul class="new_message" id="ajax_talk" style="height:666px">
+						    <include file="chat/ajax_talk_person" />
+						</ul>
+						<div id="bot_k"></div>
+					</div>
+					<div class="send_w">
+						<div>
+							<textarea class="huifu_cn" placeholder="请输入聊天内容"></textarea>
+						</div>
+						<div style="text-align: right;">
+							<button id="send_liaotian" type="button" class="send_btn">发送</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+        <include file="_layouts/chat_right_contact" />
+        <script type="text/javascript">
+		    $(document).ready(function(){
+		        ajax_talk_list();
+		    });
+             function ajax_talk_list(){
+				var user_id = $("input[name='user_id']").val();
+				 $.ajax({
+					type:"GET",
+					data:{user_id:user_id},
+					url:"__ROOT__/home/chat/talk_ajax",
+					 success:function(json) {
+					 	$('#ajax_talk').html("");
+					 	$('#ajax_talk').append(json);
+					 	$('.new_message').scrollTop($('.new_message')[0].scrollHeight);
+					 }
+				 });	
+			     setTimeout(ajax_talk_list, 1000);
+			}
+
+		</script>
+		<!--脚本-->
+		<script>
+			
+			
+			$(function(){
+				//初始化
+				$(".timely_box").height($(window).height()-150);
+				$('.new_message').scrollTop($('.new_message')[0].scrollHeight);
+				//发送聊天
+				$("#send_liaotian").click(function(){
+					var str=$(".huifu_cn").val();
+					if(str==''){
+						layer.msg('请输入聊天内容');
+						return false;
+					}
+					$(".huifu_cn").val("");
+					var user_id = $("input[name='user_id']").val();
+					 $.ajax({
+					 	async: false ,
+						type:"GET",
+						data:{user_id:user_id,content:str},
+						url:"__ROOT__/home/chat/send_talk_person",
+						 success:function(json) {
+							 $.ajax({
+								type:"GET",
+								data:{user_id:user_id},
+								url:"__ROOT__/home/chat/talk_ajax",
+								 success:function(json) {
+								 	$('#ajax_talk').html("");
+								 	$('#ajax_talk').append(json);
+								 }
+							 });
+						 }
+					 });	
+					// var dq_time="";
+					// var myDate = new Date();
+					// var ap_str='<li class="mar_b"><h2 class="liaotian_r">我<i>（'+myDate.toLocaleString()+'）:</i></h2><div class="font13 graycolor6">'+str+'</div></li>';
+					// console.log(str);
+					// $(".history").append(ap_str);
+					$('.new_message').scrollTop($('.new_message')[0].scrollHeight);
+				});
+				//查看历史记录check_history new_message
+				$(".check_history").click(function(){
+					var user_id = $("input[name='user_id']").val();
+				    var str='';
+					 $.ajax({
+					 	async: false ,
+						type:"GET",
+						data:{user_id:user_id},
+						url:"__ROOT__/home/chat/talk_ajax_history",
+						 success:function(json) {
+						 	var res = JSON.parse(json);
+						 	var data = res.old_list;
+						 	var userinfo = res.userinfo;
+						 	for(var i=0;i<data.length;i++){
+						 		if(data[i].send_id == userinfo.id){
+									str +='<li class="mar_b"><h2 class="liaotian_r">'+userinfo.name+'<i>（'+data[i].create_time+'）:</i></h2><div class="font13 graycolor6">'+data[i].content+'</div></li>';
+						 		}else{
+                                   str +='<li class="mar_b"><h2 class="liaotian_r">我<i>（'+data[i].create_time+'）:</i></h2><div class="font13 graycolor6">'+data[i].content+'</div></li>';
+						 		}
+						 	}
+						 }
+					 });	
+					// var str='<li class="mar_b"><h2 class="liaotian_r">我<i>（2016-12-03 06:30:25）:</i></h2><div class="font13 graycolor6">历史记录</div></li>';
+					// var ap_str="";
+					// for(var i=0;i<3;i++)
+					// {
+					// 	ap_str+=str;
+					// }
+					str+='<li class="mar_b"><div class="font13 history">以上是历史记录</div></li>'
+					$("#history").prepend(str);
+					$(this).hide();
+				})
+			});
+            </script>
+	</body>
+</html>

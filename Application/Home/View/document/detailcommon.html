@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>南开创文</title>
+		<link rel="stylesheet" href="__PUBLIC__/css/style.css" />
+		<script type="text/javascript" src="__PUBLIC__/js/jquery-1.12.4.min.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/js/layer/layer.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/js/laydate/laydate.js"></script>
+	</head>
+	<body>
+	<include file="_layouts/left_bar" />
+		<!--中间内容-->
+		<div class="content">
+			<div>
+				<div class="email_detail" style="padding-top: 0px;">
+					<div class="etop email_com">
+						<h2>&nbsp;<b>{$detail.title}</b></h2>
+						<table class="gongw_dtable font13" width="100%">
+							<tr>
+								<td width="70">发布时间：</td>
+								<td>{$detail.send_time|date='Y',###}年{$detail.send_time|date='m',###}月{$detail.send_time|date='d',###}日 {$detail.send_time|date='H',###}:{$detail.send_time|date='i',###}</td>
+								<td align="right" width="100">下发任务部门：</td>
+								<td>{$detail.d_name}</td>
+							</tr>
+							<tr>
+								<td>牵头单位：</td>
+								<td><?php if($detail['lead_name'])echo $detail['lead_name']; ?></td>
+								<td align="right" width="100">责任单位：</td>
+								<td><?php if($detail['responsibility_name'])echo $detail['responsibility_name']; ?></td>
+							</tr>
+							<tr>
+                                <td>完成时间：</td>
+                                <td>{$detail.finish_time|date='Y',###}年{$detail.finish_time|date='m',###}月{$detail.finish_time|date='d',###}日</td>
+							</tr>
+							<tr>
+								<td>主要事项：</td>
+								<td colspan="3">
+									{$detail.main_content}
+								</td>
+							</tr>
+						</table>
+					</div>
+					<div class="email_com nobor detail_c">
+						{$detail.content}
+					</div>
+					<div class="email_com nobor font12">
+					<if condition="$detail['edit'] eq 1" >
+                        <button type="button" class="buttonc blue huibao_gw">汇报</button>&nbsp;
+                    </if>
+					<if condition="($detail['edit'] eq 1) or ($_SESSION['userinfo']['department_id'] eq 1) ">
+                       <button type="button" class="buttonc orange jindu_gw">进度</button>&nbsp;
+					</if>
+                    <if condition="($_SESSION['userinfo']['department_id'] eq 1) and $detail['d_finish'] neq 1">
+                        <button type="button" class="buttonc green s_wancheng_gw">确认完成</button>
+                    </if>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--脚本-->
+		<script>
+			$(function(){
+                var did="{$detail.did}";
+				//汇报弹窗
+				/*$(".huibao_gw").click(function(){
+					layer.open({
+					  title:"任务进度汇报",
+					  type: 1,
+					  skin: 'layui-box', //加上边框
+					  area: ['520px', '320px'], //宽高
+					  content: '<form action="__ROOT__/home/Document/postHuibao" method="post" enctype="multipart/form-data">'+
+					  				'<div><textarea class="huibao_content" placeholder="输入汇报内容" name="message"></textarea></div>' +
+					  				'<div id="filediv"><a href="javascript:;" class="bluecolor" id="addfile">' +
+					  					'<img src="__PUBLIC__/img/icon_07.png"> 添加附件<i class="graycolor">（最大</i><i class="redcolor">1G</i>' +
+					  					'<i class="graycolor">）</i></a><a href="javascript:;" class="bluecolor">' +
+					  					'<img src="__PUBLIC__/img/icon_09.png"> 上传图片<i class="graycolor">（最大</i><i class="redcolor">1G</i>' +
+					  					'<i class="graycolor">）</i>' +
+					  					'<input type="hidden" name="did" value="{$detail.did}" />'+
+						  				'<input type="file" name="photo[]" />'+
+					  				'</a></div>' +
+					  				'<div class="center_btn">' +
+					  			'<button type="submit" onclick="return huibao_ok()" class="buttonc red huibao_ok">确定</button></div>'+
+							'</form>'
+					});
+				});*/
+                $(".huibao_gw").click(function(){
+                    layer.open({
+                        title:"任务进度汇报",
+                        type: 1,
+                        skin: 'layui-box', //加上边框
+                        area: ['520px', '320px'], //宽高
+                        content: '<form action="__ROOT__/home/Document/postHuibaoCommon" method="post" enctype="multipart/form-data">'+
+                        '<div><textarea class="huibao_content" placeholder="输入汇报内容" name="message"></textarea></div>' +
+                        '<div id="filediv"><a href="javascript:;" class="bluecolor" id="addfile">' +
+                        '<img src="__PUBLIC__/img/icon_07.png"> 添加附件</a>'+
+                        '<input type="hidden" name="did" value="{$detail.did}" />'+
+//                        '<input type="file" name="photo[]" />'+
+
+                        '</div>' +
+                        '<div class="center_btn">' +
+                        '<button type="submit" onclick="return huibao_ok()" class="buttonc red huibao_ok">确定</button></div>'+
+                        '</form>'
+                    });
+                });
+
+				$(document).on("click","#addfile",function(){
+                    var str = '<input type="file" name="photo[]" />';
+                    $("#filediv").append(str);
+                })
+				//汇报完成
+				function huibao_ok() {
+                    var html=$(".huibao_content").val();
+
+                    if(html=="")
+                    {
+                        layer.msg('汇报内容不能为空');
+                    }
+                    else
+                    {
+                        console.log(html);
+
+                        /*$.ajax({
+                            type:"GET",
+                            data:{message: html, did: did ,type:2},
+                            url:"__ROOT__/home/document/cuiban",
+                            success:function(e) {
+                                if (e==1){
+                                    layer.msg('汇报成功');
+                                    $(".layui-layer-close").click();
+                                }else{
+                                    layer.msg('汇报失败');
+                                }
+                            }
+                        });*/
+                    }
+                }
+				/*$(document).on("click",".huibao_ok",function(){
+					//alert()
+
+				});*/
+                function getLocalDate(nS) {
+                    return new Date(parseInt(nS) * 1000).toLocaleString().substr(0,9)
+                }
+                function getLocalTime(nS) {
+                    return new Date(parseInt(nS) * 1000).toLocaleString().substr(12,13)
+                }
+                //进度查看
+				$(".jindu_gw").click(function(){
+                    $.ajax({
+                        type:"GET",
+                        data:{did: did },
+                        url:"__ROOT__/home/document/jinducommon",
+                        success:function(json) {
+                            var res = JSON.parse(json);
+                            console.log(res.rs);
+                            var str='';
+                            data = res.rs;
+                            row = res.row;
+                            str += '<div class="jindu_box"><ul>';
+                            str += '<li class="clear">\
+                                <div class="L one1">'+getLocalDate(row.send_time)+'</div>\
+                                <div class="L one2">'+getLocalTime(row.send_time)+'</div>\
+                                <div class="L one3"><div class="L one31 txt_oneline">'+row.d_name+'&nbsp;</div> ';
+                            if (row.type == 1)
+                            {
+                                str += '<i class="biaoqian_cui L">催</i>';
+                            }
+                            str += '</div><div class="L one4">'+row.r_content;
+                            if (data)
+							{
+							    for(var i=0;i<data.length;i++){
+                                    str += '<li class="clear">\
+										<div class="L one1">'+getLocalDate(data[i].send_time)+'</div>\
+										<div class="L one2">'+getLocalTime(data[i].send_time)+'</div>\
+										<div class="L one3"><div class="L one31 txt_oneline">'+data[i].d_name+'&nbsp;</div> ';
+                                    if (data[i].type == 1)
+									{
+									    str += '<i class="biaoqian_cui L">催</i>';
+									}
+									str += '</div><div class="L one4">'+data[i].r_content;
+                                    if (data[i].file != null){
+                                        for(var j=0;j<data[i].file.length;j++) {
+                                            str += '<a href="'+data[i].file[j].picture_url+'" class="bluecolor"><img src="__PUBLIC__/img/icon_07.png"> '+data[i].file[j].picture_name+'</a>';
+                                        }
+									}
+								}
+                            str+='</div></li></ul>\
+							</div>';
+                            }
+                            console.log(str);
+                            layer.open({
+                                title:"任务进度",
+                                type: 1,
+                                skin: 'layui-box', //加上边框
+                                area: ['750px', '320px'], //宽高
+                                content: str
+                            });
+                        }
+                    });
+
+				});
+				
+				//完成
+				$(".r_wancheng_gw").click(function(){
+					layer.confirm('确认完成？', {
+					  btn: ['是','否'] //按钮
+					}, function(){
+						//layer.msg('已完成');
+                        $.ajax({
+                            type:"GET",
+                            data:{did: did},
+                            url:"__ROOT__/home/document/receiveDocFinish",
+                            success:function(e) {
+                                if (e==1){
+                                    layer.msg('操作成功');
+                                    $(".layui-layer-close").click();
+								}else{
+                                    layer.msg('操作失败');
+								}
+
+                            }
+                        });
+					}, function(){
+						layer.close();
+					});
+				});
+
+                //催办
+                $(".cuiban_gw").click(function(){
+                    layer.open({
+                        title:"任务催办",
+                        type: 1,
+                        skin: 'layui-box', //加上边框
+                        area: ['520px', '290px'], //宽高
+                        content: '<div><textarea class="cuiban_content" placeholder="输入催办原因"></textarea></div><div class="center_btn"><button type="button" class="buttonc red cuiban_ok">确定</button></div>'
+                    });
+                });
+                //催办完成
+                $(document).on("click",".cuiban_ok",function(){
+                    //alert()
+                    var html=$(".cuiban_content").val();
+                    var did="{$detail.did}";
+                    if(html=="")
+                    {
+                        layer.msg('催办原因不能为空');
+                    }
+                    else
+                    {
+                        $.ajax({
+                            type:"GET",
+							data:{message: html, did: did ,type:1},
+                            url:"__ROOT__/home/document/cuiban",
+                            success:function(e) {
+                                if (e==1){
+                                    layer.msg('催办成功');
+                                    $(".layui-layer-close").click();
+                                }else{
+                                    layer.msg('催办失败');
+                                }
+                            }
+                        });
+
+                        console.log(html);
+
+                    }
+                });
+                //完成
+                $(".s_wancheng_gw").click(function(){
+                    layer.confirm('确认完成？', {
+                        btn: ['是','否'] //按钮
+                    }, function(){
+                        //layer.msg('已完成');
+                        $.ajax({
+                            type:"GET",
+                            data:{did: did},
+                            url:"__ROOT__/home/document/commonFinish",
+                            success:function(e) {
+                                if (e==1){
+                                    layer.msg('操作成功');
+                                    $(".layui-layer-close").click();
+                                }else{
+                                    layer.msg('操作失败');
+                                }
+
+                            }
+                        });
+                    }, function(){
+                        layer.close();
+                    });
+                })
+			})
+		</script>
+	</body>
+</html>
+<script>
+    $(function(){
+        $('#doc2').parents("#menu").find("dl,dd").removeClass("on");
+        $('#doc2').parents("#menu").find("dd").removeClass("Show");
+        $('#doc2').addClass("on");
+        var type = "{$type}";
+        if (type==1 || type==5 ||type==6){
+            $('#dcommon').addClass("on");
+            $('#dcommon').parents("dd").addClass("Show");
+        }else if(type==2 || type==3 || type==4){
+            $('#wcn').addClass("on");
+            $('#wcn').parents("dd").addClass("Show");
+        }
+    })
+</script>

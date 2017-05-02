@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>南开创文</title>
+		<link rel="stylesheet" href="__PUBLIC__/css/style.css" />
+		<script type="text/javascript" src="__PUBLIC__/js/jquery-1.12.4.min.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/js/layer/layer.js" ></script>
+	</head>
+	<body>
+		<include file="_layouts/left_bar" />
+		<!--中间内容-->
+		<div class="content">
+			<div>
+				<div class="emai_rectitle font12">
+					<label><input type="checkbox" id="check_all" name="check_all" class="checkbox" />&nbsp;全选</label>&nbsp;
+					<button type="button" class="buttonc red" id="del"><img src="__PUBLIC__/img/an_06.png"> 删除</button>&nbsp;
+					<button type="button" class="buttonc green" onclick="window.location.reload();"><img src="__PUBLIC__/img/an_08.png"> 刷新</button>&nbsp;
+					<span>有 <i class="redcolor">{$readnum}</i> 封未读</span>
+					<div class="R">
+						<!--<a href="#" class="buttonc gray"> 上一页</a>&nbsp;
+						<a href="javascript:;" class="buttonc"> 下一页</a>-->
+
+					</div>
+				</div>
+				<div class="email_reul">
+					<ul class="font13">
+						<foreach name="emails" item="email">
+							<li class="clear">
+								<div class="L w1"><label><input name="email_num" type="checkbox" class="checkbox" value="{$email.etid}" /></label></div>
+								<div class="L w2 txt_oneline">{$email.name}</div>
+								<div class="L txt_oneline w3"><a href="__URL__\detail\id\{$email.eid}\type\1" class="Show blackcolor" <?php if($email['read']==-1){ ?>style="font-weight:600"<?php } ?>><?php if($email['email_type']==2){ ?>回复  <?php } ?>{$email.title}</a></div>
+								<div class="R"><?php echo date('Y-m-d H:i:s', $email['send_time']) ?></div>
+							</li>
+						</foreach>
+					</ul>
+				</div>
+				<div class="email_com nobor pagemore font13">
+					<!--<a href="#" class="on">1</a><a href="#">1</a><a href="#">1</a><a href="#">1</a>-->
+					{$page}
+				</div>
+			</div>
+		</div>
+
+		<!--全选的js-->
+		<script type="text/javascript" src="__PUBLIC__/js/quanxuan.js" ></script>
+	</body>
+</html>
+<script>
+	$('#del').click(function () {
+        layer.confirm('确认删除？', {
+            btn: ['是','否'] //按钮
+        }, function(){
+            var chk_value =[];
+            $('input[name="email_num"]:checked').each(function(){
+                chk_value.push($(this).val());
+            });
+            if (chk_value.length==0)
+            {
+//		    alert('你还没有选择任何内容！');
+                layer.msg('你还没有选择任何内容！');
+                return;
+            }
+            $.ajax({
+                type:"GET",
+                url:"__ROOT__/home/email/delete",
+                data:{id:chk_value},
+                success:function(data) {
+                    console.log(data);
+                    window.location.reload();
+                },
+                error: function(){
+
+                }
+            })
+        }, function(){
+            layer.close();
+        });
+    })
+
+	$('#ereceive').addClass("on");
+
+</script>

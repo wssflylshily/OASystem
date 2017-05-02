@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>南开区政府</title>
+		<link rel="stylesheet" href="__PUBLIC__/css/style.css" />
+		<script type="text/javascript" src="__PUBLIC__/js/jquery-1.12.4.min.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/js/layer/layer.js" ></script>
+	</head>
+	<body>
+		<!--top-->
+		<include file="_layouts/left_bar" />
+		<!--中间内容-->
+		<div class="content i_content" style="margin-bottom: 0px;">
+			<div style="padding:30px 30px;">
+				<div class="Hide" style="padding: 100px 0px; text-align: center; color: #C6C6C6;">选择好友开始聊天~</div>
+				<div class="timely_box">
+					<div class="title" style="position: relative;">
+						<h2 class="bluecolor" style="font-weight: bold;">{$room.room_name}</h2>
+						<!-- <div class="font12 graycolor">治安管理与交通秩序攻关指挥部</div> -->
+						<!-- <div class="now_perzu" style="position: absolute; right: 10px; top: 10px;"><img src="__PUBLIC__/img/i_img_60.png"></div> -->
+					</div>
+					<div class="timely_content">
+
+						<div id="history"></div>
+						<div class="history font13"><a href="javascript:;" class="check_history">查看历史消息</a></div>
+						<div>
+							<ul class="new_message" id="new_messages" style="height:666px;">
+								<foreach name="rs" item="val">
+								
+									<li class="mar_b">
+
+										<if condition="$val['send_id'] eq $_SESSION['userinfo']['id']">
+											<h2 class="liaotian_r">我<i>（{$val.create_time|date="Y-m-d H:i:s",###}）:</i></h2>
+										<else />
+											<h2 class="liaotian_r ke">{$val.name}<i>（{$val.create_time|date="Y-m-d H:i:s",###}）:</i></h2>
+										</if>
+
+										
+										<div class="font13 graycolor6">{$val.content}</div>
+									</li>
+
+								</foreach>
+							</ul>
+						</div>
+						
+						
+						<div id="bot_k"></div>
+					</div>
+					<div class="send_w">
+						<div>
+							<textarea class="huifu_cn" placeholder="请输入聊天内容"></textarea>
+						</div>
+						<div style="text-align: right;">
+							<button id="send_liaotian" type="button" class="send_btn">发送</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--当前群聊的信息-->
+		<!-- <form action="__ROOT__/home/chat/create_group" method="post">
+		<div id="mow_quninfor" class="Hide">
+			<div class="houqi_select clear">
+				<div class="L col-6">
+					<div class="houqi_search">
+						<div class="search_txt clear font13">
+							<input class="L qunzu" name="search_con" type="text">
+							<span class="R"></span>
+						</div>
+					</div>
+					<div class="h_one">
+						<div class="h_search">
+							<dl>
+								<dd>
+									<div class="Show txt_oneline" data_id="12">相同内容2</div>
+									<div class="Show txt_oneline" data_id="13">搜索内容</div>
+								</dd>
+							</dl>
+						</div>
+						<div class="h_content">
+							
+							<foreach name="friends_list" key="k" item="v">
+								<dl>
+								<dt><em class="add_all" title="添加整组"></em><span class="div_inblock one"><b>{$v.department_name}</b></span><span>({$k+1})</span></dt>
+								<dd class="clear">
+									<foreach name="v['friends_list']" key="k1" item="v1">
+								
+										<div class="Show txt_oneline" data_id="{$v1.user_id}">{$v1.friend_name}</div>
+									</foreach>
+									
+									
+								</dd>
+							</dl>
+		
+							</foreach>
+						</div>
+						
+					</div>
+				</div>
+				
+				<div class="R col-6">
+					<div class="font13 clear">
+						<div class="L" style="padding: 7px 10px;"><b>群名称:</b></div>
+						<div class="R" style="border: 1px solid #DDDDDD; width: 205px; border-radius: 4px; padding: 5px 10px; margin: 0px 10px 5px 0px;">
+						<div><input type="text" name="qunzu_name" class="qunzu_name" style="width: 100%;" placeholder="群名称" value="{$room.room_name}" /></div></div>
+					</div>
+					
+					<div style="padding: 10px; line-height: 10px;"><b>群成员：</b></div>
+					<div class="h_one" style="height: 238px;">
+						<ul class="houqi_old">
+							<foreach name="users" item="val">
+								<li class="clear"><div class="L txt_oneline">{$val.name}</div><div class="R" data_id="{$val.id}"></div></li>
+							</foreach>
+							
+							
+						</ul>
+					</div>
+				</div>
+			</div>
+			<input type="hidden" name="yx_chengyuan" />
+			<div class="center_btn"><button type="button" class="buttonc red houqi_ok">确定</button></div>
+			
+		</div>
+		</form> -->
+		<!--右侧联系人-->
+		<include file="_layouts/chat_right_contact" />
+		<!--脚本-->
+		<script type="text/javascript">
+		    $(document).ready(function(){
+		        ajax_talk_list();
+		    });
+             function ajax_talk_list(){
+				var user_id = $("input[name='user_id']").val();
+				 $.ajax({
+					type:"GET",
+					data:{to_id: "{$room.id}"},
+					url:"__ROOT__/home/chat/ajax_talk_group",
+					 success:function(json) {
+					 	$('#new_messages').html("");
+					 	$('#new_messages').append(json);
+					 	$('#new_messages').scrollTop($('#new_messages')[0].scrollHeight);
+					 }
+				 });	
+			     setTimeout(ajax_talk_list, 1000);
+			}
+
+		</script>
+		<script>
+			
+			
+			$(function(){
+				//$('#new_messages').scrollTop( $('#new_messages')[0].scrollHeight );
+				//初始化
+				$(".timely_box").height($(window).height()-150);
+				setTimeout(ajax_talk_list, 1000);
+				//发送聊天
+				$("#send_liaotian").click(function(){
+					var str=$(".huifu_cn").val();
+					$(".huifu_cn").val("");
+					var dq_time="";
+					var myDate = new Date();
+					var ap_str='<li class="mar_b"><h2 class="liaotian_r">我<i>（'+myDate.toLocaleString()+'）:</i></h2><div class="font13 graycolor6">'+str+'</div></li>';
+					//console.log(str);
+					$(".new_message").append(ap_str);
+					$.ajax({
+						 type:"GET",
+						data:{content:str, type:2, to_id: "{$room.id}"},
+						 url:"__ROOT__/home/chat/send_msg",
+						 success:function(a) {
+							 // window.location.reload();
+							 $('#new_messages').scrollTop($('#new_messages')[0].scrollHeight);
+						 }
+					 });
+					
+				});
+				//查看历史记录check_history new_message
+				$(".check_history").click(function(){
+				
+					var str='<ul>';
+					 $.ajax({
+					 	async: false ,
+						type:"GET",
+						data:{to_id:"{$room.id}"},
+						url:"__ROOT__/home/chat/ajax_group_history",
+						 success:function(json) {
+						 	var data = JSON.parse(json);
+						 	if(!data){
+                                str+='<li class="mar_b"><div class="font13 history">暂无历史记录</div></li></ul>'
+							}else{
+                                for(var i=0;i<data.length;i++){
+                                    if(data[i].send_id == "{$_SESSION['userinfo']['id']}"){
+
+                                        str +='<li class="mar_b"><h2 class="liaotian_r">我<i>（'+data[i].c_time+'）:</i></h2><div class="font13 graycolor6">'+data[i].content+'</div></li>';
+                                    }else{
+                                        str +='<li class="mar_b"><h2 class="liaotian_r">'+data[i].name+'<i>（'+data[i].c_time+'）:</i></h2><div class="font13 graycolor6">'+data[i].content+'</div></li>';
+                                    }
+                                }
+                                str+='<li class="mar_b"><div class="font13 history">以上是历史记录</div></li></ul>'
+							}
+
+						 }
+					 });	
+					//str+='<li class="mar_b"><div class="font13 history">以上是历史记录</div></li></ul>'
+					$("#history").prepend(str);
+					$(this).hide();
+				})
+
+				$(".now_perzu").click(function(){
+					obj=$("#mow_quninfor");
+					
+					layer.open({
+					  title:"群成员",
+					  type: 1,
+					  skin: 'layui-box', //加上边框
+					  area: ['620px', '422px'], //宽高
+					  content: '<div class="select_tanchu clear"></div>'
+					});
+					$(".select_tanchu").html(obj.html());
+					//赋值input
+					$(".select_tanchu").find(".qunzu_name").val(obj.find(".qunzu_name").val());
+					$(".select_tanchu").find("input[name='yx_chengyuan']").val(obj.find("input[name='yx_chengyuan']").val());
+				});
+				//群组_修改
+				$(document).on("click",".houqi_ok",function(){
+					//群组修改
+					if(!$(this).parents(".select_tanchu").hasClass("new_add_tanchu"))
+					{
+						obj.html($(this).parents(".select_tanchu").html());
+						$(".houqi_search .search_txt .delete").click();
+						var str_id="",str_name="";
+						var qunzu_str="";
+
+						for(var i=0;i<obj.find(".houqi_old .R").length;i++)
+						{
+							//old_id[i]=$(this).parents(".houqi_select").find(".houqi_old .R:eq("+i+")").attr("data_id");
+							str_id+=obj.find(".houqi_old .R:eq("+i+")").attr("data_id");
+							str_name+=obj.find(".houqi_old .R:eq("+i+")").siblings(".L").html();
+							if(i!=obj.find(".houqi_old .R").length-1)
+							{
+								str_id+=",";
+								str_name+=";";
+							}
+						}
+						obj.find("input[name='yx_chengyuan']").val(str_id);
+						//console.log(obj.find("input[name='yx_chengyuan']").val());
+						obj.find(".qunzu_name").val($(this).parents(".select_tanchu").find(".qunzu_name").val());
+						if(obj.find(".qunzu_name").val()=="")
+						{
+							qunzu_str="未命名";
+						}
+						else
+						{
+							qunzu_str=obj.find(".qunzu_name").val();
+						}
+						//console.log(qunzu_str);
+						$(".layui-layer-close").click();
+					}
+					
+				})
+				
+			});
+            </script>
+	</body>
+</html>

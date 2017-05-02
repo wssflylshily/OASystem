@@ -1,0 +1,13 @@
+	<foreach name="talk_list" item="v" key="k">
+	    <if condition="$v.send_id neq $_SESSION['userinfo']['id']">
+			<li class="mar_b">
+				<h2 class="liaotian_r ke">{$userinfo.name}<i>({$v.create_time|date="y-m-d H:i:s",###}):</i></h2>
+				<div class="font13 graycolor6">{$v.content}</div>
+			</li>
+		<else />
+			<li class="mar_b">
+				<h2 class="liaotian_r">我<i>({$v.create_time|date="y-m-d H:i:s",###}):</i></h2>
+				<div class="font13 graycolor6">{$v.content}</div>
+			</li>
+		</if>
+	</foreach>

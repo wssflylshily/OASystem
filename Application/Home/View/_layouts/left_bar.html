@@ -1,0 +1,425 @@
+<div class="top clear">
+    <div class="L"><a href="__ROOT__/home/home/index"><img src="__PUBLIC__/img/logo.png" width="250" height="79"></a></div>
+    <div class="R"><a href="javascript:;" id="exit" class="Show"><img src="__PUBLIC__/img/topicon_07.png"></a></div>
+
+    <div class="R"><a href="javascript:;"  class="Show editpw"><img src="__PUBLIC__/img/topicon_112.png"></a></div>
+    <div class="R"><a href="javascript:;"  class="Show editi"><img src="__PUBLIC__/img/topicon_111.png"></a></div>
+
+    <!--<div class="R"><a href="#" class="Show notice_p"><img src="__PUBLIC__/img/topicon_05.png"><i class="notice_d"></i></a></div>-->
+    <div class="R"><a href="__ROOT__/home/home/index" class="Show"><img src="__PUBLIC__/img/topicon_03.png"></a></div>
+
+</div>
+<div class="left_bar">
+    <div class="top_time com_div"><?php echo date('Y-m-d H:i:s'); ?></div>
+    <div class="com_div" id="userinfo">
+
+        <!--	<p>邮箱：{$userinfo['email']}</p>-->
+    </div>
+    <div id="menu" class="menu">
+        <dl>
+            <dt class="com_div" id="email">
+                <a href="javascript:;" class="Show">
+                    <img src="__PUBLIC__/img/i_img_35.png">&nbsp;<span>个人邮箱</span>&nbsp;<img id="new" style="display: none" src="__PUBLIC__/img/i_img_38.png">
+                </a>
+            </dt>
+            <dd class="Hide Show">
+                <a href="__ROOT__/home/email/write" id="ewrite" class="Show clear">
+                    写邮件
+                </a>
+                <a href="__ROOT__/home/email/receive" id="ereceive" class="Show clear">
+                    收件箱
+                    <i class="R" style="display: none" id="read"></i>
+                </a>
+                <a href="__ROOT__/home/email/send" id="esend" class="Show clear">
+                    发件箱
+                </a>
+            </dd>
+        </dl>
+        <dl>
+            <dt class="com_div" id="doc">
+                <a href="javascript:;" class="Show">
+                    <img src="__PUBLIC__/img/i_img_53.png">&nbsp;<span>任务发布</span>&nbsp;<img id="dnew" style="display: none" src="__PUBLIC__/img/i_img_38.png">
+                </a>
+            </dt>
+            <dd class="Hide">
+                <a href="__ROOT__/home/document/write" class="Show clear" id="dwrite">
+                    发布任务
+                    <!--<i class="R" style="display: none" id="reminder"></i>-->
+                </a>
+                <a href="__ROOT__/home/document/receive" class="Show clear" id="dreceive">
+                    收到任务
+                    <i class="R" style="display: none" id="tfrecdoc"></i>
+                </a>
+                <a href="__ROOT__/home/document/send" class="Show clear" id="dsend">
+                    已发布任务
+                </a>
+                <!--<a href="#" class="Show clear" id="dcb">
+                    催督办
+                    <i class="R" style="display: none" id="reminder"></i>
+                </a>-->
+            </dd>
+        </dl>
+         <dl>
+            <dt class="com_div" id="doc2">
+                <a href="javascript:;" class="Show">
+                    <img src="__PUBLIC__/img/i_img_57.png">&nbsp;<span>常规性任务管理</span>&nbsp;
+                </a>
+            </dt>
+            <dd class="Hide">
+                <a href="__ROOT__/home/DocumentCommon/commonIndex/type/1" class="Show clear" id="dcommon">
+                    创建全国文明城区工作
+                </a>
+                <a href="__ROOT__/home/DocumentCommon/commonIndex/type/2" class="Show clear" id="wcn">
+                    未成年人思想道德建设
+                </a>
+            </dd>
+        </dl>
+        <dl>
+            <dt class="com_div" id="news">
+                <a href="javascript:;" class="Show">
+                    <img src="__PUBLIC__/img/i_img_59.png">&nbsp;<span>新闻动态</span>
+                </a>
+            </dt>
+            <dd class="Hide">
+                <a href="__ROOT__/home/news/news" class="Show clear" id="nnews">
+                    最新公告
+                </a>
+<!--                 <a href="__ROOT__/home/news/zhuti" class="Show clear" id="nzhuti">
+                    主题活动
+                </a> -->
+                <a href="__ROOT__/home/news/jianbao" class="Show clear" id="njianbao">
+                    工作简报
+                </a>
+            </dd>
+        </dl>
+<!--         <dl>
+            <dt class="com_div">
+                <a href="javascript:;" class="Show">
+                    <img src="__PUBLIC__/img/i_img_63.png">&nbsp;<span>数据统计</span>
+                </a>
+            </dt>
+            <dd class="Hide">
+                <a href="#" class="Show clear">
+                    公文统计
+                </a>
+                <a href="#" class="Show clear">
+                    任务统计
+                </a>
+            </dd>
+        </dl> -->
+<!--         <dl>
+            <dt class="com_div">
+                <a href="javascript:;" class="Show">
+                    <img src="__PUBLIC__/img/i_img_61.png">&nbsp;<span>即时通讯</span>
+                </a>
+            </dt>
+            <dd class="Hide">
+                <a href="#" class="Show clear">
+                    即时通讯
+                </a>
+            </dd>
+        </dl> -->
+        <if condition="$_SESSION['userinfo']['department_id'] eq 1">
+        <dl>
+            <dt class="com_div" id="config">
+                <a href="javascript:;" class="Show">
+                    <img src="__PUBLIC__/img/i_img_60.png">&nbsp;<span>系统管理</span>
+                </a>
+            </dt>
+            <dd class="Hide">
+<!--                 <a href="#" class="Show clear">
+                    系统管理
+                </a> -->
+                <a href="__ROOT__/home/User/user_list" class="Show clear" id="cuser">
+                    用户管理
+                </a>
+                <a href="__ROOT__/home/User/department" class="Show clear" id="cdep">
+                    部门管理
+                </a>
+                <a href="__ROOT__/home/User/gonggao_list" class="Show clear" id="cgonggao">
+                    公告管理
+                </a>
+                <a href="__ROOT__/home/User/jianbao_list" class="Show clear" id="cjianbao">
+                    简报管理
+                </a>
+                <a href="__ROOT__/home/User/task_common_w" class="Show clear" id="cchanggui">
+                    录入常规性任务
+                </a>
+                <a href="__ROOT__/home/User/commonIndex/type/1" class="Show clear" id="cchangguiwm">
+                    创建全国文明城区工作
+                </a>
+                <a href="__ROOT__/home/User/commonIndex/type/2" class="Show clear" id="cchangguiwcn">
+                    未成年人思想道德建设
+                </a> 
+                
+            </dd>
+        </dl>
+        </if>
+    </div>
+</div>
+<script>
+    //用户信息
+    $.ajax({
+        type:"GET",
+        url:"__ROOT__/home/ajax/leftBarUserAjax",
+        success:function(json) {
+            var data = JSON.parse(json);
+//            console.log(json);
+            if (json) {
+                var str="";
+                str += '<p>用户：'+data.name+'</p>'+
+                        '<p>部门：'+data.d_name+'</p>'+
+                        '<a href="__ROOT__/home/home/index" class="Show" style="padding: 20px 0 0 30px;"><img src="__PUBLIC__/img/back.png"></a>';
+
+                $('#userinfo').html("");
+                $('#userinfo').append(str);
+            }else{
+                $('#userinfo').html("");
+                $('#userinfo').append("未知");
+            }
+
+        },
+        error: function(){
+            $('#userinfo').html("");
+            $('#userinfo').append("未知");
+        }
+    });
+
+    //个人邮箱
+    $.ajax({
+        type:"GET",
+        url:"__ROOT__/home/ajax/leftBarEmailAjax",
+        success:function(data) {
+//            console.log(data);
+            if (data>0) {
+                $('#read').html("");
+                $('#read').append(data);
+                $('#read').show();
+                $('#new').show();
+            }
+
+        },
+        error: function(){
+
+        }
+    });
+
+    //公文管理 收文管理
+    $.ajax({
+        type:"GET",
+        url:"__ROOT__/home/ajax/leftBarDocumentAjax",
+        success:function(data) {
+//            console.log(data);
+            if (data>0) {
+                $('#document').html("");
+                $('#document').append(data);
+                $('#document').show();
+                $('#dnew').show();
+            }
+
+        },
+        error: function(){
+
+        }
+    });
+
+    //公文管理 催督办
+    $.ajax({
+        type:"GET",
+        url:"__ROOT__/home/ajax/leftBarReminderAjax",
+        success:function(data) {
+//            console.log(data);
+            if (data>0) {
+                $('#reminder').html("");
+                $('#reminder').append(data);
+                $('#reminder').show();
+                $('#dnew').show();
+            }
+
+        },
+        error: function(){
+
+        }
+    });
+
+    //公文管理 收到的任务
+    $.ajax({
+        type:"GET",
+        url:"__ROOT__/home/ajax/receiveDocument",
+        success:function(data) {
+//            console.log(data);
+            if (data>0) {
+                $('#tfrecdoc').html("");
+                $('#tfrecdoc').append(data);
+                $('#tfrecdoc').show();
+                $('#dnew').show();
+            }
+
+        },
+        error: function(){
+
+        }
+    });
+
+</script>
+<!--脚本-->
+<script>
+    $(function(){
+        //左侧二级菜单动画
+        $("#menu dt").click(function(){
+            if(!$(this).hasClass("on"))
+            {
+//						console.log($(this).hasClass("on"))
+                $(this).addClass("on").parents("dl").siblings().children("dt").removeClass("on");
+                $(this).siblings("dd").slideDown(300);
+                $(this).parents("dl").siblings().children("dd").slideUp(300);
+            }
+
+        });
+        //退出
+        $("#exit").click(function(){
+            //confirm;
+            layer.confirm('确认退出？', {
+                btn: ['是','否'] //按钮
+            }, function(){
+                $.ajax({
+                    type:"GET",
+                    url:"__ROOT__/home/ajax/loginout",
+                    success:function(data) {
+                        layer.msg('退出成功');
+                        window.location.href="__ROOT__/home/auth/login"
+                    },
+                    error: function(){
+
+                    }
+                });
+            }, function(){
+                layer.close();
+            });
+        });
+        //常用联系人删除
+        $(document).on("click",".changyong .usually_list li .delete",function(){
+            layer.alert("删除");
+        });
+        //清空常用联系人
+        $(".contact_operate .all_delete").click(function(){
+
+        })
+        //选项卡
+        $(".contact_kind > div").click(function(){
+            var index=$(this).index();
+            console.log(index);
+            $(this).addClass("on").siblings().removeClass("on");
+            $(".contact_list > div:nth-child("+(index+1)+")").show().siblings().hide();
+        })
+        //联系人分组
+        /*$(".lianxiren dl dt").click(function(){
+            $(this).siblings("dd").toggle();
+            $(this).parent("dl").toggleClass("on");
+
+        })*/
+        $(document).on("click",".lianxiren dl dt",function(){
+            $(this).siblings("dd").toggle();
+            $(this).parents("dl").toggleClass("on");
+        })
+
+        var edit_zt=0;
+        $(".editi").click(function(){
+            $.ajax({
+                type:"post",
+                url:"__ROOT__/home/ajax/userinfo",
+                success:function(json) {
+                    var data = JSON.parse(json);
+                    layer.open({
+                        title:"修改用户信息",
+                        type: 1,
+                        skin: 'layui-box', //加上边框
+                        area: ['520px', '322px'], //宽高
+                        content: '<div class="add_form"><table width="100%"><tr><td width="70">姓&nbsp;&nbsp;名：</td><td><div class="div1"><input type="text" id="name" value="'+data.name+'" placeholder="输入姓名" /></div></td></tr><tr><td>手&nbsp;&nbsp;机&nbsp;&nbsp;号：</td><td><div class="div1"><input id="tel" type="text" value="'+data.phone+'" placeholder="输入手机号" /></div></td></tr></table></div><div class="center_btn"><button  class="buttonc red user_add" type="submit" id="editinfo" data-id="" >修改</button></div>'
+                    });
+                    var str='<div class="select_box Hide"><input type="hidden" name="d_id"><div class="ulcontent"><ul><foreach name="department" item="v" key="k"><li class="txt_oneline" data-id="{$v.id}">{$v.d_name}</li></foreach></ul></div></div>';
+
+                    $(".xlk").append(str);
+                    $(".xlk").hover(function(){},function(){
+                        $(this).children(".select_box").hide();
+                    });
+
+                    edit_zt=0;
+                }
+            });
+
+        });
+
+        $(document).on("click","#editinfo",function(){
+            $.ajax({
+                type:"post",
+                data:{name:$("#name").val(), tel:$("#tel").val()},
+                url:"__ROOT__/home/ajax/edit",
+                success:function(json) {
+                    var data = JSON.parse(json);
+                    if (data.status==1){
+                        layer.msg('修改成功');
+                        setTimeout(function(){
+                            window.location.reload();
+                        },3000)
+                    }else{
+                        layer.msg(data.msg);
+                    }
+
+                },
+                error: function(){
+
+                }
+            });
+        })
+
+        var editpw_zt=0;
+        $(".editpw").click(function(){
+            layer.open({
+                title:"修改登陆密码",
+                type: 1,
+                skin: 'layui-box', //加上边框
+                area: ['520px', '322px'], //宽高
+                content: '<div class="add_form"><table width="100%"><tr><td width="70">原&nbsp;&nbsp;密&nbsp;&nbsp;码：</td><td><div class="div1"><input type="password" id="pw1" value="" placeholder="输入原密码" /></div></td></tr><tr><td>新&nbsp;&nbsp;密&nbsp;&nbsp;码：</td><td><div class="div1"><input id="pw2" type="password" value="" placeholder="输入新密码" /></div></td></tr><tr><td>确&nbsp;&nbsp;认&nbsp;&nbsp;密&nbsp;&nbsp;码：</td><td><div class="div1"><input id="pw3" type="password" value="" placeholder="确认新密码" /></div></td></tr></table></div><div class="center_btn"><button  class="buttonc red user_add" type="submit" id="editpw" data-id="" >修改</button></div>'
+            });
+            var str='<div class="select_box Hide"><input type="hidden" name="d_id"><div class="ulcontent"><ul><foreach name="department" item="v" key="k"><li class="txt_oneline" data-id="{$v.id}">{$v.d_name}</li></foreach></ul></div></div>';
+
+            $(".xlk").append(str);
+            $(".xlk").hover(function(){},function(){
+                $(this).children(".select_box").hide();
+            });
+
+            editpw_zt=0;
+        });
+
+        $(document).on("click","#editpw",function(){
+            var pw2 = $("#pw2").val();
+            var pw3 = $("#pw3").val();
+            if (pw2 != pw3){
+                layer.msg("两次输入的密码不一致");
+                return false;
+            }
+            $.ajax({
+                type:"post",
+                data:{pw1:$("#pw1").val(), pw2:pw2},
+                url:"__ROOT__/home/ajax/postpw",
+                success:function(json) {
+                    var data = JSON.parse(json);
+                    if (data.status==1){
+                        layer.msg('修改成功');
+                        setTimeout(function(){
+                            window.location.reload();
+                        },3000)
+                    }else{
+                        layer.msg(data.msg);
+                    }
+
+                },
+                error: function(){
+
+                }
+            });
+        })
+
+    })
+</script>

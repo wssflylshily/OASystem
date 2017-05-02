@@ -1,0 +1,16 @@
+<foreach name="rs" item="val">
+								
+
+	<li class="mar_b">
+
+		<if condition="$val['send_id'] eq $_SESSION['userinfo']['id']">
+			<h2 class="liaotian_r">我<i>（{$val.c_time|date="Y-m-d H:i:s",###}）:</i></h2>
+		<else />
+			<h2 class="liaotian_r ke">{$val.name}<i>（{$val.c_time|date="Y-m-d H:i:s",###}）:</i></h2>
+		</if>
+
+		
+		<div class="font13 graycolor6">{$val.content}</div>
+	</li>
+
+</foreach>
